@@ -1,0 +1,98 @@
+﻿@page "/process-overview"
+
+@using System.Net.Http
+@using System.Net.Http.Json
+@using System.Threading.Tasks
+@inject HttpClient Http
+@using PSDTO
+
+<PageTitle>Process overview</PageTitle>
+
+
+
+
+<h1>Process overview</h1>
+
+<p>This component demonstrates fetching data from a service.</p>
+
+@if (processes == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>IsEnabled</th>
+                <th>IsReplayable</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var process in processes)
+            {
+                <tr>
+                    <td>@process.Id</td>
+                    <td>@process.Name</td>
+                    <td>@process.Description</td>
+                    <td>@process.IsEnabled</td>
+                    <td>@process.IsReplayable</td>
+                </tr>
+                <tr>
+                    <th colspan="5">
+                        Tasks
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                    </th>
+                    <th>
+                        Task id
+                    </th>
+                    <th>
+                        Task name
+                    </th>
+                    <th>
+                        Task description
+                    </th>
+                    <th>
+                        Task key
+                    </th>
+                </tr>
+
+                @foreach (var task in process.ProcessTaskDefinitions)
+                {
+                    <tr>
+                        <td>
+                            &nbsp;
+                        </td>
+                        <td>
+                            @task.Id
+                        </td>
+                        <td>
+                            @task.Name
+                        </td>
+                        <td>
+                            @task.Description
+                        </td>
+                        <td>
+                            @task.Key
+                        </td>
+                    </tr>
+                }
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+    private ProcessDefinitionDTO[]? processes;
+
+    protected override async Task OnInitializedAsync()
+    {
+        processes = await Http.GetFromJsonAsync<ProcessDefinitionDTO[]>("/PS");
+    }
+}
