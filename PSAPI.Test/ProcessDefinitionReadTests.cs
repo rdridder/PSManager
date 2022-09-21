@@ -1,13 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using PSAPI.Controllers;
-using PSDTO;
-using Shouldly;
 
 namespace PSAPI.Test
 {
-    public class ProcessDefinitionTests : DatabaseTestBase
+    public class ProcessDefinitionReadTests : DatabaseTestBase
     {
-        public ProcessDefinitionTests() : base()
+        public ProcessDefinitionReadTests() : base()
         {
         }
 
@@ -59,14 +57,28 @@ namespace PSAPI.Test
         }
 
         [Fact]
-        async Task TestCreateProcessDefinition()
+        public async Task TestPageZero()
         {
             using (var context = CreateContext())
             {
                 var psController = new PSController(_logger, _mapper, _config, context);
-                var processDefinitionCreateDTO = new ProcessDefinitionCreateDTO("my name", "my description", false, false);
-                var result = await psController.AddProcessDefinition(processDefinitionCreateDTO);
-                result.GetObjectResult().Id.ShouldBe(12);
+                var result = await psController.GetProcessDefinitions(0);
+                var notFound = result.Result as NotFoundResult;
+                notFound.StatusCode.ShouldBe(404);
+            }
+        }
+
+        [Fact]
+        public async Task TestIncompletePage()
+        {
+            using (var context = CreateContext())
+            {
+                var psController = new PSController(_logger, _mapper, _config, context);
+                var definitions = await psController.GetProcessDefinitions(3);
+                definitions.ShouldNotBeNull();
+                var result = definitions.Value;
+                result.Count().ShouldBe(2);
+                result[0].ProcessTaskDefinitions.Count.ShouldBe(2);
             }
         }
     }

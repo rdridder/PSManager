@@ -93,6 +93,15 @@ namespace PSAPI.Test
                 };
                 processDefinitions.Add(processDefinition);
             }
+            var processDefinitionEmpty = new ProcessDefinition()
+            {
+                Id = 12,
+                Description = $"Process description no tasks",
+                Name = $"Process name no tasks",
+                IsEnabled = true,
+                IsReplayable = true
+            };
+            processDefinitions.Add(processDefinitionEmpty);
             return processDefinitions;
         }
 

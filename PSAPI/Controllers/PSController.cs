@@ -49,6 +49,10 @@ namespace PSAPI.Controllers
         [HttpGet("GetProcessDefinitions")]
         public async Task<ActionResult<List<ProcessDefinitionDTO>>> GetProcessDefinitions(int page = 1)
         {
+            if (page == 0)
+            {
+                return NotFound();
+            }
             int skip = (page - 1) * _limit;
             var result = await _processContext.ProcessDefinitions
                 .Skip(skip)
@@ -108,14 +112,15 @@ namespace PSAPI.Controllers
         }
 
         [HttpPost("AddProcessTaskDefinition")]
-        public async Task<IActionResult> AddProcessTaskDefinition(ProcessTaskDefinitionCreateDTO processTaskDefinitionCreateDTO)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CreatedIdDTO))]
+        public async Task<ActionResult<CreatedIdDTO>> AddProcessTaskDefinition(ProcessTaskDefinitionCreateDTO processTaskDefinitionCreateDTO)
         {
             if (ModelState.IsValid)
             {
                 var processTaskDefinition = _mapper.Map<ProcessTaskDefinition>(processTaskDefinitionCreateDTO);
                 await _processContext.AddAsync(processTaskDefinition);
                 await _processContext.SaveChangesAsync();
-                return Ok();
+                return Ok(new CreatedIdDTO(processTaskDefinition.Id));
             }
             return BadRequest();
         }
