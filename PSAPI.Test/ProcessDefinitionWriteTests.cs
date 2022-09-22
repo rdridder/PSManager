@@ -30,12 +30,21 @@ namespace PSAPI.Test
                 var psController = new PSController(_logger, _mapper, _config, context);
                 var task = new ProcessTaskDefinitionCreateDTO("myTask1", "myTaskDesc1", "myTaskKey1", true);
                 var result = await psController.AddProcessTaskDefinition(task);
-                result.GetObjectResult().Id.ShouldBe(3);
+                var objectResult = result.GetObjectResult();
+                objectResult.Id.ShouldBe(3);
+
+                var taskResult = await psController.GetProcessTaskDefinition(3);
+                var taskObject = taskResult.GetObjectResult();
+                taskObject.Id.ShouldBe(3);
+                taskObject.Name.ShouldBe("myTask1");
+                taskObject.Description.ShouldBe("myTaskDesc1");
+                taskObject.Key.ShouldBe("myTaskKey1");
+                taskObject.IsEnabled.ShouldBeTrue();
             }
         }
 
         [Fact]
-        async Task TestAddTaskDefinitions()
+        async Task TestAddTaskDefinitionToProcess()
         {
             using (var context = CreateContext())
             {
@@ -45,6 +54,7 @@ namespace PSAPI.Test
                 actionResult.ShouldBeOfType<OkResult>();
                 var definition = await psController.GetProcessDefinition(12);
                 var def = definition.GetObjectResult();
+                def.ProcessTaskDefinitions.Count.ShouldBe(1);
                 def.ProcessTaskDefinitions[0].Name.ShouldBe("Process task definition name 1");
             }
         }

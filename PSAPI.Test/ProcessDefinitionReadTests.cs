@@ -10,7 +10,7 @@ namespace PSAPI.Test
         }
 
         [Fact]
-        public async Task TestGetProcessDefinition()
+        public async Task TestGetProcessDefinitionPage()
         {
             using (var context = CreateContext())
             {
@@ -45,12 +45,24 @@ namespace PSAPI.Test
         }
 
         [Fact]
-        public async Task TestGetNonExistingPage()
+        public async Task TestGetNonExistingProcessDefinitionPage()
         {
             using (var context = CreateContext())
             {
                 var psController = new PSController(_logger, _mapper, _config, context);
                 var result = await psController.GetProcessDefinitions(4);
+                var notFound = result.Result as NotFoundResult;
+                notFound.StatusCode.ShouldBe(404);
+            }
+        }
+
+        [Fact]
+        public async Task TestGetNonExistingProcessDefinitionId()
+        {
+            using (var context = CreateContext())
+            {
+                var psController = new PSController(_logger, _mapper, _config, context);
+                var result = await psController.GetProcessDefinition(300);
                 var notFound = result.Result as NotFoundResult;
                 notFound.StatusCode.ShouldBe(404);
             }
