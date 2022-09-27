@@ -93,6 +93,6 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        processes = await Http.GetFromJsonAsync<ProcessDefinitionDTO[]>("/PS");
+        processes = await Http.GetFromJsonAsync<ProcessDefinitionDTO[]>("/PS/GetProcessDefinitions");
     }
 }
