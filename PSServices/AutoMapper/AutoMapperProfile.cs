@@ -14,6 +14,8 @@ namespace PSAPI.AutoMapper
             CreateMap<ProcessTaskDefinitionCreateDTO, ProcessTaskDefinition>(MemberList.Source);
             CreateMap<ProcessDefinitionUpdateDTO, ProcessDefinition>(MemberList.Source);
             CreateMap<ProcessTaskDefinitionUpdateDTO, ProcessTaskDefinition>(MemberList.Source);
+            CreateMap<ProcessDefinition, Process>().ConvertUsing<ProcessDefinitionProcessTypeConverter>();
+            CreateMap<ProcessTaskDefinition, ProcessTask>();
         }
     }
 }

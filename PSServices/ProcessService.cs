@@ -170,6 +170,19 @@ namespace PSServices
             }
         }
 
+        public async Task<CreatedIdDTO> StartProcess(StartProcessDTO startProcess)
+        {
+            var result = await _processContext.ProcessDefinitions
+                .Where(x => x.Name == startProcess.Name)
+                .Include(x => x.ProcessDefinitionTaskDefinitions)
+                .ThenInclude(x => x.ProcessTaskDefinition).FirstOrDefaultAsync();
+            var process = _mapper.Map<Process>(result);
+
+            _processContext.Add(process);
+            await _processContext.SaveChangesAsync();
+            return new CreatedIdDTO(process.Id);
+        }
+
         public Task UpdateProcessDefinition(ProcessDefinitionUpdateDTO processDefinitionUpdateDTO)
         {
             var processDefinition = _mapper.Map<ProcessDefinition>(processDefinitionUpdateDTO);

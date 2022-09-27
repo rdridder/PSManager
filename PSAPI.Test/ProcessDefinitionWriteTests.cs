@@ -57,5 +57,18 @@ namespace PSAPI.Test
                 def.ProcessTaskDefinitions[0].Name.ShouldBe("Process task definition name 1");
             }
         }
+
+        [Fact]
+        async Task TestStartProcess()
+        {
+            using (var context = CreateContext())
+            {
+                var psController = CreateController(context);
+                var start = new StartProcessDTO("Process name 1");
+                var actionResult = await psController.StartProcess(start);
+                var taskObject = actionResult.GetObjectResult();
+                taskObject.Id.ShouldBe(1);
+            }
+        }
     }
 }
