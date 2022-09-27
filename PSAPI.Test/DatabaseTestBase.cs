@@ -8,6 +8,7 @@ using Moq;
 using PSAPI.AutoMapper;
 using PSAPI.Controllers;
 using PSData.Context;
+using PSServices;
 
 namespace PSAPI.Test
 {
@@ -47,6 +48,13 @@ namespace PSAPI.Test
         }
 
         public ProcessContext CreateContext() => new ProcessContext(_contextOptions);
+
+        public PSController CreateController(ProcessContext context)
+        {
+            var processService = new ProcessService(context, _mapper);
+            var psController = new PSController(_logger, _mapper, _config, processService);
+            return psController;
+        }
 
         private MapperConfiguration GetMapperConfig()
         {

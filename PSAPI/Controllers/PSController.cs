@@ -1,9 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Model;
-using PSData.Context;
 using PSDTO;
+using PSServices;
 
 namespace PSAPI.Controllers
 {
@@ -14,8 +12,7 @@ namespace PSAPI.Controllers
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public class PSController : ControllerBase
     {
-
-        private readonly ProcessContext _processContext;
+        private readonly IProcessService _processService;
 
         private readonly IMapper _mapper;
 
@@ -23,78 +20,65 @@ namespace PSAPI.Controllers
 
         private readonly ILogger<PSController> _logger;
 
-        public PSController(ILogger<PSController> logger, IMapper mapper, IConfiguration configuration, ProcessContext processContext)
+        public PSController(ILogger<PSController> logger, IMapper mapper,
+                                IConfiguration configuration, IProcessService processService)
         {
             _logger = logger;
-            _processContext = processContext;
             _mapper = mapper;
             _limit = int.Parse(configuration["PageSize"]);
+            _processService = processService;
         }
 
         [HttpGet("GetProcessDefinition")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProcessDefinitionDTO))]
         public async Task<ActionResult<ProcessDefinitionDTO>> GetProcessDefinition(long id)
         {
-            var result = await _processContext.ProcessDefinitions
-                .Where(x => x.Id == id)
-                .Include(x => x.ProcessDefinitionTaskDefinitions)
-                .ThenInclude(x => x.ProcessTaskDefinition).FirstOrDefaultAsync();
+            var result = await _processService.GetProcessDefinition(id);
             if (result == null)
             {
                 return NotFound();
             }
-
-            return _mapper.Map<ProcessDefinitionDTO>(result);
+            return result;
         }
 
         [HttpGet("GetProcessDefinitions")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ProcessDefinitionDTO>))]
         public async Task<ActionResult<List<ProcessDefinitionDTO>>> GetProcessDefinitions(int page = 1)
         {
             if (page == 0)
             {
                 return NotFound();
             }
-            int skip = (page - 1) * _limit;
-            var result = await _processContext.ProcessDefinitions
-                .Skip(skip)
-                .Take(_limit)
-                .Include(x => x.ProcessDefinitionTaskDefinitions)
-                .ThenInclude(x => x.ProcessTaskDefinition)
-                .ToListAsync();
-            var dto = _mapper.Map<List<ProcessDefinitionDTO>>(result);
+            var result = await _processService.GetProcessDefinitions(page);
             if (result == null || !result.Any())
             {
                 return NotFound();
             }
-            return dto;
+            return result;
         }
 
         [HttpGet("GetProcessTaskDefinition")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ProcessTaskDefinitionDTO>))]
         public async Task<ActionResult<ProcessTaskDefinitionDTO>> GetProcessTaskDefinition(long id)
         {
-            var result = await _processContext.ProcessTaskDefinition
-                .Where(x => x.Id == id).FirstOrDefaultAsync();
+            var result = await _processService.GetProcessTaskDefinition(id);
             if (result == null)
             {
                 return NotFound();
             }
-
-            return _mapper.Map<ProcessTaskDefinitionDTO>(result);
+            return result;
         }
 
         [HttpGet("GetProcessTaskDefinitions")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ProcessTaskDefinitionDTO>))]
         public async Task<ActionResult<List<ProcessTaskDefinitionDTO>>> GetProcessTaskDefinitions(int page = 1)
         {
-            int skip = (page - 1) * _limit;
-            var result = await _processContext.ProcessTaskDefinition
-                .Skip(skip)
-                .Take(_limit)
-                .ToListAsync();
-            var dto = _mapper.Map<List<ProcessTaskDefinitionDTO>>(result);
+            var result = await _processService.GetProcessTaskDefinitions(page);
             if (result == null || !result.Any())
             {
                 return NotFound();
             }
-            return dto;
+            return result;
         }
 
         [HttpPost("AddProcessDefinition")]
@@ -103,10 +87,8 @@ namespace PSAPI.Controllers
         {
             if (ModelState.IsValid)
             {
-                var processDefinition = _mapper.Map<ProcessDefinition>(processDefinitionCreateDTO);
-                await _processContext.AddAsync(processDefinition);
-                await _processContext.SaveChangesAsync();
-                return Ok(new CreatedIdDTO(processDefinition.Id));
+                var result = await _processService.AddProcessDefinition(processDefinitionCreateDTO);
+                return Ok(result);
             }
             return BadRequest();
         }
@@ -117,10 +99,8 @@ namespace PSAPI.Controllers
         {
             if (ModelState.IsValid)
             {
-                var processTaskDefinition = _mapper.Map<ProcessTaskDefinition>(processTaskDefinitionCreateDTO);
-                await _processContext.AddAsync(processTaskDefinition);
-                await _processContext.SaveChangesAsync();
-                return Ok(new CreatedIdDTO(processTaskDefinition.Id));
+                var result = await _processService.AddProcessTaskDefinition(processTaskDefinitionCreateDTO);
+                return Ok(result);
             }
             return BadRequest();
         }
@@ -130,42 +110,14 @@ namespace PSAPI.Controllers
         {
             if (ModelState.IsValid)
             {
-                var processDefinition = await _processContext.ProcessDefinitions
-                                            .Include(x => x.ProcessDefinitionTaskDefinitions)
-                                            .ThenInclude(x => x.ProcessTaskDefinition)
-                                            .SingleOrDefaultAsync(x => x.Id == addTaskToProcessDefinition.ProcessId);
-
-                if (processDefinition == null)
+                // TODO fix exception handling
+                try
+                {
+                    await _processService.AddTaskToProcessDefinition(addTaskToProcessDefinition);
+                }
+                catch (Exception e)
                 {
                     return BadRequest();
-                }
-
-                var postedProcessTaskDefinition = await _processContext.ProcessTaskDefinition.Where(x => addTaskToProcessDefinition.TaskIds.Contains(x.Id)).ToListAsync();
-                if (!postedProcessTaskDefinition.Any())
-                {
-                    return BadRequest();
-                }
-
-                // Filter out the tasks already assigned to the process definition
-                var postedTaskIds = postedProcessTaskDefinition.Select(x => x.Id).ToList();
-                var assignedTaskIds = processDefinition.ProcessDefinitionTaskDefinitions.Select(x => x.ProcessTaskDefinitionId).ToList();
-
-                // Remove the already assigned tasks from the posted process task definitions
-                postedProcessTaskDefinition = postedProcessTaskDefinition.Where(x => !assignedTaskIds.Contains(x.Id)).ToList();
-
-
-                if (postedProcessTaskDefinition.Any())
-                {
-                    foreach (var definition in postedProcessTaskDefinition)
-                    {
-                        processDefinition.ProcessDefinitionTaskDefinitions.Add(new ProcessDefinitionTaskDefinition
-                        {
-                            ProcessDefinitionId = processDefinition.Id,
-                            ProcessTaskDefinitionId = definition.Id
-                        });
-                    }
-                    _processContext.Update(processDefinition);
-                    await _processContext.SaveChangesAsync();
                 }
                 return Ok();
             }
@@ -177,9 +129,7 @@ namespace PSAPI.Controllers
         {
             if (ModelState.IsValid)
             {
-                var processDefinition = _mapper.Map<ProcessDefinition>(processDefinitionUpdateDTO);
-                _processContext.Update(processDefinition);
-                await _processContext.SaveChangesAsync();
+                await _processService.UpdateProcessDefinition(processDefinitionUpdateDTO);
                 return Ok();
             }
             return BadRequest();
@@ -190,9 +140,7 @@ namespace PSAPI.Controllers
         {
             if (ModelState.IsValid)
             {
-                var processTaskDefinition = _mapper.Map<ProcessTaskDefinition>(processTaskDefinitionUpdateDTO);
-                _processContext.Update(processTaskDefinition);
-                await _processContext.SaveChangesAsync();
+                await _processService.UpdateProcessTaskDefinition(processTaskDefinitionUpdateDTO);
                 return Ok();
             }
             return BadRequest();
@@ -203,34 +151,14 @@ namespace PSAPI.Controllers
         {
             if (ModelState.IsValid)
             {
-                var processDefinition = await _processContext.ProcessDefinitions
-                                            .Include(x => x.ProcessDefinitionTaskDefinitions)
-                                            .ThenInclude(x => x.ProcessTaskDefinition)
-                                            .SingleOrDefaultAsync(x => x.Id == removeTaskFromProcessDefinition.ProcessId);
-
-                if (processDefinition == null)
+                // TODO fix exception handling
+                try
                 {
-                    return BadRequest();
+                    await _processService.RemoveTaskFromProcessDefinition(removeTaskFromProcessDefinition);
                 }
-
-                var postedProcessTaskDefinition = await _processContext.ProcessTaskDefinition
-                    .Where(x => removeTaskFromProcessDefinition.TaskIds.Contains(x.Id)).ToListAsync();
-                if (!postedProcessTaskDefinition.Any())
+                catch (Exception e)
                 {
-                    return BadRequest();
-                }
-
-                // Remove the tasks from the process definition
-                var postedTaskIds = postedProcessTaskDefinition.Select(x => x.Id).ToList();
-                var taskCount = processDefinition.ProcessDefinitionTaskDefinitions.Count;
-                processDefinition.ProcessDefinitionTaskDefinitions =
-                    processDefinition.ProcessDefinitionTaskDefinitions
-                        .Where(x => !postedTaskIds.Contains(x.ProcessTaskDefinitionId)).ToList();
-
-                if (processDefinition.ProcessDefinitionTaskDefinitions.Count != taskCount)
-                {
-                    _processContext.Update(processDefinition);
-                    await _processContext.SaveChangesAsync();
+                    BadRequest();
                 }
                 return Ok();
             }
@@ -242,9 +170,7 @@ namespace PSAPI.Controllers
         {
             if (ModelState.IsValid)
             {
-                var taskDefinitionList = removeById.Ids.Select(x => new ProcessTaskDefinition() { Id = x });
-                _processContext.RemoveRange(taskDefinitionList);
-                await _processContext.SaveChangesAsync();
+                await _processService.RemoveTaskDefinition(removeById);
                 return Ok();
             }
             return BadRequest();
@@ -255,14 +181,10 @@ namespace PSAPI.Controllers
         {
             if (ModelState.IsValid)
             {
-                var processDefinitionList = removeById.Ids.Select(x => new ProcessDefinition() { Id = x });
-                _processContext.RemoveRange(processDefinitionList);
-                await _processContext.SaveChangesAsync();
+                await _processService.RemoveProcessDefinition(removeById);
                 return Ok();
             }
             return BadRequest();
         }
-
-
     }
 }

@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using PSAPI.Controllers;
 
 namespace PSAPI.Test
 {
@@ -14,7 +13,7 @@ namespace PSAPI.Test
         {
             using (var context = CreateContext())
             {
-                var psController = new PSController(_logger, _mapper, _config, context);
+                var psController = CreateController(context);
                 for (int k = 0; k < 2; k++)
                 {
                     var page = k * 5;
@@ -49,7 +48,7 @@ namespace PSAPI.Test
         {
             using (var context = CreateContext())
             {
-                var psController = new PSController(_logger, _mapper, _config, context);
+                var psController = CreateController(context);
                 var result = await psController.GetProcessDefinitions(4);
                 var notFound = result.Result as NotFoundResult;
                 notFound.StatusCode.ShouldBe(404);
@@ -61,7 +60,7 @@ namespace PSAPI.Test
         {
             using (var context = CreateContext())
             {
-                var psController = new PSController(_logger, _mapper, _config, context);
+                var psController = CreateController(context);
                 var result = await psController.GetProcessDefinition(300);
                 var notFound = result.Result as NotFoundResult;
                 notFound.StatusCode.ShouldBe(404);
@@ -73,7 +72,7 @@ namespace PSAPI.Test
         {
             using (var context = CreateContext())
             {
-                var psController = new PSController(_logger, _mapper, _config, context);
+                var psController = CreateController(context);
                 var result = await psController.GetProcessDefinitions(0);
                 var notFound = result.Result as NotFoundResult;
                 notFound.StatusCode.ShouldBe(404);
@@ -85,7 +84,7 @@ namespace PSAPI.Test
         {
             using (var context = CreateContext())
             {
-                var psController = new PSController(_logger, _mapper, _config, context);
+                var psController = CreateController(context);
                 var definitions = await psController.GetProcessDefinitions(3);
                 definitions.ShouldNotBeNull();
                 var result = definitions.Value;

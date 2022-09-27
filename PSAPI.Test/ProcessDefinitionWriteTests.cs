@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using PSAPI.Controllers;
 using PSDTO;
 
 namespace PSAPI.Test
@@ -15,7 +14,7 @@ namespace PSAPI.Test
         {
             using (var context = CreateContext())
             {
-                var psController = new PSController(_logger, _mapper, _config, context);
+                var psController = CreateController(context);
                 var processDefinitionCreateDTO = new ProcessDefinitionCreateDTO("my name", "my description", false, false);
                 var result = await psController.AddProcessDefinition(processDefinitionCreateDTO);
                 result.GetObjectResult().Id.ShouldBe(13);
@@ -27,7 +26,7 @@ namespace PSAPI.Test
         {
             using (var context = CreateContext())
             {
-                var psController = new PSController(_logger, _mapper, _config, context);
+                var psController = CreateController(context);
                 var task = new ProcessTaskDefinitionCreateDTO("myTask1", "myTaskDesc1", "myTaskKey1", true);
                 var result = await psController.AddProcessTaskDefinition(task);
                 var objectResult = result.GetObjectResult();
@@ -48,7 +47,7 @@ namespace PSAPI.Test
         {
             using (var context = CreateContext())
             {
-                var psController = new PSController(_logger, _mapper, _config, context);
+                var psController = CreateController(context);
                 var add = new AddTaskToProcessDefinition(12, new List<long> { 1 });
                 var actionResult = await psController.AddTaskToProcessDefinition(add);
                 actionResult.ShouldBeOfType<OkResult>();

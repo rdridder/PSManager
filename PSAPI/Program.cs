@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using PSAPI.AutoMapper;
 using PSAPI.Middleware;
 using PSData.Context;
+using PSServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,7 @@ builder.Services.AddDbContext<ProcessContext>(opt =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+builder.Services.AddScoped<IProcessService, ProcessService>();
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.
