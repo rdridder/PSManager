@@ -90,12 +90,14 @@ namespace PSAPI.Test
                     IsReplayable = true,
                     ProcessDefinitionTaskDefinitions = new List<ProcessDefinitionTaskDefinition>() {
                         new ProcessDefinitionTaskDefinition() {
-                        ProcessDefinitionId = i,
-                        ProcessTaskDefinitionId = 1
+                            ProcessDefinitionId = i,
+                            ProcessTaskDefinitionId = 1,
+                            Order = 1
                         },
                         new ProcessDefinitionTaskDefinition() {
                             ProcessDefinitionId = i,
-                            ProcessTaskDefinitionId = 2
+                            ProcessTaskDefinitionId = 2,
+                            Order = 2
                         }
                     }
                 };

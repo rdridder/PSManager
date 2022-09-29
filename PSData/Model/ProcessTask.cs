@@ -6,6 +6,8 @@ namespace Model
     {
         public long Id { get; set; }
 
+        public int Order { get; set; }
+
         [MaxLength(32)]
         public string Name { get; set; }
 

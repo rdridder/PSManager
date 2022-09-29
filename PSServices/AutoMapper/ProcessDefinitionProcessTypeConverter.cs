@@ -16,7 +16,8 @@ namespace PSAPI.AutoMapper
                     tasks.Add(new ProcessTask()
                     {
                         Key = processDefinitionTaskDefinitions.ProcessTaskDefinition.Key,
-                        Name = processDefinitionTaskDefinitions.ProcessTaskDefinition.Name
+                        Name = processDefinitionTaskDefinitions.ProcessTaskDefinition.Name,
+                        Order = processDefinitionTaskDefinitions.Order
                     });
                 }
             }
