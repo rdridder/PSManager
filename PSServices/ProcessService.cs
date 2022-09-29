@@ -83,6 +83,15 @@ namespace PSServices
             }
         }
 
+        public async Task<ProcessDTO> GetProcess(long id)
+        {
+            var result = await _processContext.Processes
+                .Where(x => x.Id == id)
+                .Include(x => x.ProcessTasks)
+                .FirstOrDefaultAsync();
+            return _mapper.Map<ProcessDTO>(result);
+        }
+
         public async Task<ProcessDefinitionDTO> GetProcessDefinition(long id)
         {
             var result = await _processContext.ProcessDefinitions
@@ -102,6 +111,27 @@ namespace PSServices
                 .ThenInclude(x => x.ProcessTaskDefinition)
                 .ToListAsync();
             return _mapper.Map<List<ProcessDefinitionDTO>>(result);
+        }
+
+        public async Task<List<ProcessDTO>> GetProcesses(int page = 1)
+        {
+            int skip = (page - 1) * _limit;
+            var result = await _processContext.Processes
+                .Skip(skip)
+                .Take(_limit)
+                .Include(x => x.ProcessTasks)
+                .ToListAsync();
+            return _mapper.Map<List<ProcessDTO>>(result);
+        }
+
+        public async Task<List<ProcessListDTO>> GetProcessList(int page = 1)
+        {
+            int skip = (page - 1) * _limit;
+            var result = await _processContext.Processes
+                .Skip(skip)
+                .Take(_limit)
+                .ToListAsync();
+            return _mapper.Map<List<ProcessListDTO>>(result);
         }
 
         public async Task<ProcessTaskDefinitionDTO> GetProcessTaskDefinition(long id)
