@@ -8,6 +8,7 @@ using Moq;
 using PSAPI.AutoMapper;
 using PSAPI.Controllers;
 using PSData.Context;
+using PSDTO;
 using PSServices;
 
 namespace PSAPI.Test
@@ -44,7 +45,7 @@ namespace PSAPI.Test
                 .EnableSensitiveDataLogging()
                 .Options;
 
-            SetupDatabase();
+            SetupDatabase().GetAwaiter().GetResult();
         }
 
         public ProcessContext CreateContext() => new ProcessContext(_contextOptions);
@@ -136,7 +137,7 @@ namespace PSAPI.Test
             return processTaskDefintions;
         }
 
-        private void SetupDatabase()
+        private async Task SetupDatabase()
         {
             using (var context = CreateContext())
             {
@@ -145,6 +146,14 @@ namespace PSAPI.Test
                 context.SaveChanges();
                 context.AddRange(GetProcessDefinitions());
                 context.SaveChanges();
+
+                // All process definition are in the database, create some processes
+                var psController = CreateController(context);
+                for (var i = 1; i < 7; i++)
+                {
+                    var dto = new StartProcessDTO($"Process name {i}");
+                    await psController.StartProcess(dto);
+                }
             }
         }
 

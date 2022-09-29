@@ -1,8 +1,4 @@
-﻿using AutoMapper;
-using Model;
-using PSDTO;
-
-namespace PSAPI.AutoMapper
+﻿namespace PSAPI.AutoMapper
 {
     public class AutoMapperProfile : Profile
     {
@@ -15,6 +11,10 @@ namespace PSAPI.AutoMapper
             CreateMap<ProcessDefinitionUpdateDTO, ProcessDefinition>(MemberList.Source);
             CreateMap<ProcessTaskDefinitionUpdateDTO, ProcessTaskDefinition>(MemberList.Source);
             CreateMap<ProcessDefinition, Process>().ConvertUsing<ProcessDefinitionProcessTypeConverter>();
+            CreateMap<ProcessTaskDefinition, ProcessTask>();
+            CreateMap<Process, ProcessListDTO>();
+            CreateMap<Process, ProcessDTO>();
+            CreateMap<ProcessTask, ProcessTaskDTO>();
             CreateMap<ProcessTaskDefinition, ProcessTask>().ForMember(dest => dest.Order, p => p.Ignore());
         }
     }

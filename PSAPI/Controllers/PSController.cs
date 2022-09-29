@@ -41,6 +41,18 @@ namespace PSAPI.Controllers
             return result;
         }
 
+        [HttpGet("GetProcess")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProcessDTO))]
+        public async Task<ActionResult<ProcessDTO>> GetProcess(long id)
+        {
+            var result = await _processService.GetProcess(id);
+            if (result == null)
+            {
+                return NotFound();
+            }
+            return result;
+        }
+
         [HttpGet("GetProcessDefinitions")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ProcessDefinitionDTO>))]
         public async Task<ActionResult<List<ProcessDefinitionDTO>>> GetProcessDefinitions(int page = 1)
@@ -50,6 +62,38 @@ namespace PSAPI.Controllers
                 return NotFound();
             }
             var result = await _processService.GetProcessDefinitions(page);
+            if (result == null || !result.Any())
+            {
+                return NotFound();
+            }
+            return result;
+        }
+
+        [HttpGet("GetProcesses")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ProcessDTO>))]
+        public async Task<ActionResult<List<ProcessDTO>>> GetProcesses(int page = 1)
+        {
+            if (page == 0)
+            {
+                return NotFound();
+            }
+            var result = await _processService.GetProcesses(page);
+            if (result == null || !result.Any())
+            {
+                return NotFound();
+            }
+            return result;
+        }
+
+        [HttpGet("GetProcessList")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ProcessListDTO>))]
+        public async Task<ActionResult<List<ProcessListDTO>>> GetProcessList(int page = 1)
+        {
+            if (page == 0)
+            {
+                return NotFound();
+            }
+            var result = await _processService.GetProcessList(page);
             if (result == null || !result.Any())
             {
                 return NotFound();

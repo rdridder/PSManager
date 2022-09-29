@@ -10,6 +10,12 @@ namespace PSServices
 
         public Task<List<ProcessDefinitionDTO>> GetProcessDefinitions(int page = 1);
 
+        public Task<ProcessDTO> GetProcess(long id);
+
+        public Task<List<ProcessDTO>> GetProcesses(int page = 1);
+
+        public Task<List<ProcessListDTO>> GetProcessList(int page = 1);
+
         public Task<ProcessTaskDefinitionDTO> GetProcessTaskDefinition(long id);
 
         public Task<List<ProcessTaskDefinitionDTO>> GetProcessTaskDefinitions(int page = 1);
