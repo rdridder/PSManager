@@ -54,7 +54,8 @@ namespace PSServices
                 throw new System.Exception("Process not found");
             }
 
-            var postedProcessTaskDefinition = await _processContext.ProcessTaskDefinition.Where(x => addTaskToProcessDefinition.TaskIds.Contains(x.Id)).ToListAsync();
+            var postedTaskIds = addTaskToProcessDefinition.TaskIds.Select(x => x.Id).ToList();
+            var postedProcessTaskDefinition = await _processContext.ProcessTaskDefinition.Where(x => postedTaskIds.Contains(x.Id)).ToListAsync();
             if (!postedProcessTaskDefinition.Any())
             {
                 // TODO fix
@@ -62,7 +63,6 @@ namespace PSServices
             }
 
             // Filter out the tasks already assigned to the process definition
-            var postedTaskIds = postedProcessTaskDefinition.Select(x => x.Id).ToList();
             var assignedTaskIds = processDefinition.ProcessDefinitionTaskDefinitions.Select(x => x.ProcessTaskDefinitionId).ToList();
 
             // Remove the already assigned tasks from the posted process task definitions
@@ -70,12 +70,14 @@ namespace PSServices
 
             if (postedProcessTaskDefinition.Any())
             {
-                foreach (var definition in postedProcessTaskDefinition)
+                foreach (var taskDefinition in postedProcessTaskDefinition)
                 {
+                    // TODO Linq statement is bit flaky, fix
                     processDefinition.ProcessDefinitionTaskDefinitions.Add(new ProcessDefinitionTaskDefinition
                     {
                         ProcessDefinitionId = processDefinition.Id,
-                        ProcessTaskDefinitionId = definition.Id
+                        ProcessTaskDefinitionId = taskDefinition.Id,
+                        Order = addTaskToProcessDefinition.TaskIds.Where(x => x.Id == taskDefinition.Id).FirstOrDefault().Order
                     });
                 }
                 _processContext.Update(processDefinition);

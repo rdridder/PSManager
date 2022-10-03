@@ -5,7 +5,7 @@ namespace PSDTO
 {
     public class AddTaskToProcessDefinitionDTO
     {
-        public AddTaskToProcessDefinitionDTO(long processId, List<long> taskIds)
+        public AddTaskToProcessDefinitionDTO(long processId, List<AddTaskIdAndOrderToProcessDefinitionDTO> taskIds)
         {
             ProcessId = processId;
             TaskIds = taskIds;
@@ -15,6 +15,6 @@ namespace PSDTO
         public long ProcessId { get; set; }
 
         [Required]
-        public List<long> TaskIds { get; set; }
+        public List<AddTaskIdAndOrderToProcessDefinitionDTO> TaskIds { get; set; }
     }
 }

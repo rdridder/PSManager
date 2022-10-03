@@ -48,7 +48,7 @@ namespace PSAPI.Test
             using (var context = CreateContext())
             {
                 var psController = CreateController(context);
-                var add = new AddTaskToProcessDefinitionDTO(12, new List<long> { 1 });
+                var add = new AddTaskToProcessDefinitionDTO(12, new List<AddTaskIdAndOrderToProcessDefinitionDTO> { new(1, 1) });
                 var actionResult = await psController.AddTaskToProcessDefinition(add);
                 actionResult.ShouldBeOfType<OkResult>();
                 var definition = await psController.GetProcessDefinition(12);
