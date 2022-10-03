@@ -42,6 +42,7 @@ namespace PSAPI.Test
                     result.ProcessTasks[j].Id.ShouldBe(j + 1);
                     result.ProcessTasks[j].Name.ShouldBe($"Process task definition name {j + 1}");
                     result.ProcessTasks[j].Key.ShouldBe($"process_task_{j + 1}");
+                    result.ProcessTasks[j].Order.ShouldBe(j + 1);
                 }
             }
         }
@@ -101,6 +102,7 @@ namespace PSAPI.Test
                     {
                         list[i - 1].ProcessTasks[j - 1].Name.ShouldBe($"Process task definition name {j}");
                         list[i - 1].ProcessTasks[j - 1].Key.ShouldBe($"process_task_{j}");
+                        list[i - 1].ProcessTasks[j - 1].Order.ShouldBe(j);
                     }
                 }
             }
