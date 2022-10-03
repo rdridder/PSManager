@@ -150,7 +150,7 @@ namespace PSAPI.Controllers
         }
 
         [HttpPost("AddTaskToProcessDefinition")]
-        public async Task<IActionResult> AddTaskToProcessDefinition(AddTaskToProcessDefinition addTaskToProcessDefinition)
+        public async Task<IActionResult> AddTaskToProcessDefinition(AddTaskToProcessDefinitionDTO addTaskToProcessDefinition)
         {
             if (ModelState.IsValid)
             {
@@ -210,7 +210,7 @@ namespace PSAPI.Controllers
         }
 
         [HttpDelete("RemoveTaskFromProcessDefinition")]
-        public async Task<IActionResult> RemoveTaskFromProcessDefinition(RemoveTaskFromProcessDefinition removeTaskFromProcessDefinition)
+        public async Task<IActionResult> RemoveTaskFromProcessDefinition(RemoveTaskFromProcessDefinitionDTO removeTaskFromProcessDefinition)
         {
             if (ModelState.IsValid)
             {
@@ -229,7 +229,7 @@ namespace PSAPI.Controllers
         }
 
         [HttpDelete("RemoveTaskDefinition")]
-        public async Task<IActionResult> RemoveTaskDefinition(RemoveById removeById)
+        public async Task<IActionResult> RemoveTaskDefinition(RemoveByIdDTO removeById)
         {
             if (ModelState.IsValid)
             {
@@ -240,7 +240,7 @@ namespace PSAPI.Controllers
         }
 
         [HttpDelete("RemoveProcessDefinition")]
-        public async Task<IActionResult> RemoveProcessDefinition(RemoveById removeById)
+        public async Task<IActionResult> RemoveProcessDefinition(RemoveByIdDTO removeById)
         {
             if (ModelState.IsValid)
             {

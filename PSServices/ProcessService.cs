@@ -40,7 +40,7 @@ namespace PSServices
             return new CreatedIdDTO(processTaskDefinition.Id);
         }
 
-        public async Task AddTaskToProcessDefinition(AddTaskToProcessDefinition addTaskToProcessDefinition)
+        public async Task AddTaskToProcessDefinition(AddTaskToProcessDefinitionDTO addTaskToProcessDefinition)
         {
 
             var processDefinition = await _processContext.ProcessDefinitions
@@ -151,21 +151,21 @@ namespace PSServices
             return _mapper.Map<List<ProcessTaskDefinitionDTO>>(result);
         }
 
-        public Task RemoveProcessDefinition(RemoveById removeById)
+        public Task RemoveProcessDefinition(RemoveByIdDTO removeById)
         {
             var processDefinitionList = removeById.Ids.Select(x => new ProcessDefinition() { Id = x });
             _processContext.RemoveRange(processDefinitionList);
             return _processContext.SaveChangesAsync();
         }
 
-        public Task RemoveTaskDefinition(RemoveById removeById)
+        public Task RemoveTaskDefinition(RemoveByIdDTO removeById)
         {
             var taskDefinitionList = removeById.Ids.Select(x => new ProcessTaskDefinition() { Id = x });
             _processContext.RemoveRange(taskDefinitionList);
             return _processContext.SaveChangesAsync();
         }
 
-        public async Task RemoveTaskFromProcessDefinition(RemoveTaskFromProcessDefinition removeTaskFromProcessDefinition)
+        public async Task RemoveTaskFromProcessDefinition(RemoveTaskFromProcessDefinitionDTO removeTaskFromProcessDefinition)
         {
             var processDefinition = await _processContext.ProcessDefinitions
                                         .Include(x => x.ProcessDefinitionTaskDefinitions)

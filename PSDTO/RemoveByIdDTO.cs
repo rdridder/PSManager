@@ -3,9 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PSDTO
 {
-    public class RemoveById
+    public class RemoveByIdDTO
     {
-        public RemoveById(List<long> ids)
+        public RemoveByIdDTO(List<long> ids)
         {
             Ids = ids;
         }

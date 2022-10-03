@@ -24,17 +24,17 @@ namespace PSServices
 
         public Task<CreatedIdDTO> AddProcessTaskDefinition(ProcessTaskDefinitionCreateDTO processTaskDefinitionCreateDTO);
 
-        public Task AddTaskToProcessDefinition(AddTaskToProcessDefinition addTaskToProcessDefinition);
+        public Task AddTaskToProcessDefinition(AddTaskToProcessDefinitionDTO addTaskToProcessDefinition);
 
         public Task UpdateProcessDefinition(ProcessDefinitionUpdateDTO processDefinitionUpdateDTO);
 
         public Task UpdateProcessTaskDefinition(ProcessTaskDefinitionUpdateDTO processTaskDefinitionUpdateDTO);
 
-        public Task RemoveTaskFromProcessDefinition(RemoveTaskFromProcessDefinition removeTaskFromProcessDefinition);
+        public Task RemoveTaskFromProcessDefinition(RemoveTaskFromProcessDefinitionDTO removeTaskFromProcessDefinition);
 
-        public Task RemoveTaskDefinition(RemoveById removeById);
+        public Task RemoveTaskDefinition(RemoveByIdDTO removeById);
 
-        public Task RemoveProcessDefinition(RemoveById removeById);
+        public Task RemoveProcessDefinition(RemoveByIdDTO removeById);
 
         public Task<CreatedIdDTO> StartProcess(StartProcessDTO startProcess);
     }

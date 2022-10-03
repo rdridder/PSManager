@@ -3,9 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PSDTO
 {
-    public class AddTaskToProcessDefinition
+    public class RemoveTaskFromProcessDefinitionDTO
     {
-        public AddTaskToProcessDefinition(long processId, List<long> taskIds)
+        public RemoveTaskFromProcessDefinitionDTO(long processId, List<long> taskIds)
         {
             ProcessId = processId;
             TaskIds = taskIds;
