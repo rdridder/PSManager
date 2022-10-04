@@ -99,7 +99,8 @@ namespace PSServices
             var result = await _processContext.ProcessDefinitions
                 .Where(x => x.Id == id)
                 .Include(x => x.ProcessDefinitionTaskDefinitions)
-                .ThenInclude(x => x.ProcessTaskDefinition).FirstOrDefaultAsync();
+                .ThenInclude(x => x.ProcessTaskDefinition)
+                .FirstOrDefaultAsync();
             return _mapper.Map<ProcessDefinitionDTO>(result);
         }
 

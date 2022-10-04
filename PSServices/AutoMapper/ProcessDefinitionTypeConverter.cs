@@ -2,6 +2,7 @@
 using Model;
 using PSDTO;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PSAPI.AutoMapper
 {
@@ -12,7 +13,8 @@ namespace PSAPI.AutoMapper
             var tasks = new List<ProcessTaskDefinitionDTO>();
             if (source.ProcessDefinitionTaskDefinitions != null)
             {
-                foreach (var processDefinitionTaskDefinitions in source.ProcessDefinitionTaskDefinitions)
+                // TODO, check if we can handle this ordering in the DB
+                foreach (var processDefinitionTaskDefinitions in source.ProcessDefinitionTaskDefinitions.OrderBy(x => x.Order))
                 {
                     tasks.Add(context.Mapper.Map<ProcessTaskDefinitionDTO>(processDefinitionTaskDefinitions.ProcessTaskDefinition));
                 }
