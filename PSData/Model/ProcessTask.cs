@@ -13,5 +13,7 @@ namespace Model
 
         [MaxLength(32)]
         public string Key { get; set; }
+
+        public Status Status { get; set; }
     }
 }

@@ -19,6 +19,8 @@ namespace PSData.Context
 
         public virtual DbSet<Process> Processes { get; set; } = null!;
 
+        public virtual DbSet<Status> Status { get; set; } = null!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ProcessDefinitionTaskDefinition>()

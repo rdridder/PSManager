@@ -9,6 +9,7 @@ using PSAPI.AutoMapper;
 using PSAPI.Controllers;
 using PSData.Context;
 using PSDTO;
+using PSDTO.enums;
 using PSServices;
 
 namespace PSAPI.Test
@@ -75,6 +76,19 @@ namespace PSAPI.Test
                {"PageSize", "5"},
             };
             return config;
+        }
+
+        private List<Status> GetStatuses()
+        {
+            var result = new List<Status>();
+            foreach (var val in Enum.GetValues(typeof(StatusEnum)))
+            {
+                result.Add(new Status()
+                {
+                    Name = val.ToString()
+                });
+            }
+            return result;
         }
 
         private List<ProcessDefinition> GetProcessDefinitions()
@@ -145,6 +159,8 @@ namespace PSAPI.Test
                 context.AddRange(GetProcessTaskDefinitions());
                 context.SaveChanges();
                 context.AddRange(GetProcessDefinitions());
+                context.SaveChanges();
+                context.AddRange(GetStatuses());
                 context.SaveChanges();
 
                 // All process definition are in the database, create some processes

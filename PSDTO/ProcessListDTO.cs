@@ -14,5 +14,7 @@
         public string Name { get; set; }
 
         public bool IsReplayable { get; set; }
+
+        public string Status { get; set; }
     }
 }

@@ -12,5 +12,7 @@ namespace Model
         public bool IsReplayable { get; set; }
 
         public virtual List<ProcessTask> ProcessTasks { get; set; }
+
+        public Status Status { get; set; }
     }
 }

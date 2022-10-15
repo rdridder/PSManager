@@ -187,6 +187,25 @@ namespace PSAPI.Controllers
             return BadRequest();
         }
 
+        [HttpPost("ContinueProcess")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CreatedIdDTO))]
+        public async Task<ActionResult<ProcessStatusDTO>> ContinueProcess(ContinueProcessDTO continueProcess)
+        {
+            if (ModelState.IsValid)
+            {
+                // TODO fix exception handling
+                try
+                {
+                    return await _processService.ContinueProcess(continueProcess);
+                }
+                catch (Exception e)
+                {
+                    return BadRequest();
+                }
+            }
+            return BadRequest();
+        }
+
         [HttpPatch("UpdateProcessDefinition")]
         public async Task<IActionResult> UpdateProcessDefinition(ProcessDefinitionUpdateDTO processDefinitionUpdateDTO)
         {

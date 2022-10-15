@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Model;
 using PSData.Context;
 using PSDTO;
+using PSDTO.enums;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -89,7 +90,7 @@ namespace PSServices
         {
             var result = await _processContext.Processes
                 .Where(x => x.Id == id)
-                .Include(x => x.ProcessTasks)
+                .Include(x => x.ProcessTasks.OrderBy(x => x.Order))
                 .FirstOrDefaultAsync();
             return _mapper.Map<ProcessDTO>(result);
         }
@@ -209,11 +210,39 @@ namespace PSServices
                 .Where(x => x.Name == startProcess.Name)
                 .Include(x => x.ProcessDefinitionTaskDefinitions)
                 .ThenInclude(x => x.ProcessTaskDefinition).FirstOrDefaultAsync();
-            var process = _mapper.Map<Process>(result);
 
+            var openStatus = await _processContext.Status.Where(x => x.Name == StatusEnum.open.ToString()).FirstOrDefaultAsync();
+            var process = _mapper.Map<Process>(result, opts => opts.Items["OpenStatus"] = openStatus);
             _processContext.Add(process);
             await _processContext.SaveChangesAsync();
             return new CreatedIdDTO(process.Id);
+        }
+
+        public async Task<ProcessStatusDTO> ContinueProcess(ContinueProcessDTO continueProcess)
+        {
+            var process = await _processContext.Processes
+                .Where(x => x.Id == continueProcess.ProcessId)
+                .Include(x => x.ProcessTasks.OrderBy(x => x.Order))
+                .FirstAsync();
+
+            var runningStatus = await _processContext.Status.FirstAsync(x => x.Name == StatusEnum.running.ToString());
+            process.Status = runningStatus;
+
+            foreach (var task in process.ProcessTasks)
+            {
+                if (task.Status.Name.Equals(StatusEnum.open.ToString()))
+                {
+                    // Set the first open task to running
+                    task.Status = runningStatus;
+                    break;
+                }
+            }
+            _processContext.Update(process);
+            await _processContext.SaveChangesAsync();
+
+
+            // TODO fix
+            return new ProcessStatusDTO(1);
         }
 
         public Task UpdateProcessDefinition(ProcessDefinitionUpdateDTO processDefinitionUpdateDTO)

@@ -37,5 +37,7 @@ namespace PSServices
         public Task RemoveProcessDefinition(RemoveByIdDTO removeById);
 
         public Task<CreatedIdDTO> StartProcess(StartProcessDTO startProcess);
+
+        public Task<ProcessStatusDTO> ContinueProcess(ContinueProcessDTO continueProcess);
     }
 }
