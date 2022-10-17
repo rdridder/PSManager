@@ -4,12 +4,13 @@ namespace PSDTO
 {
     public class ProcessTaskDefinitionCreateDTO
     {
-        public ProcessTaskDefinitionCreateDTO(string name, string description, string key, bool isEnabled)
+        public ProcessTaskDefinitionCreateDTO(string name, string description, string key, bool isEnabled, string processTaskType)
         {
             Name = name;
             Description = description;
             Key = key;
             IsEnabled = isEnabled;
+            ProcessTaskType = processTaskType;
         }
 
         [MaxLength(32)]
@@ -23,5 +24,8 @@ namespace PSDTO
 
         [Required]
         public bool IsEnabled { get; set; }
+
+        [Required]
+        public string ProcessTaskType { get; set; }
     }
 }

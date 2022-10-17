@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PSData.Context;
 
@@ -11,9 +12,10 @@ using PSData.Context;
 namespace PSAPI.Migrations
 {
     [DbContext(typeof(ProcessContext))]
-    partial class ProcessContextModelSnapshot : ModelSnapshot
+    [Migration("20221017070545_TaskType")]
+    partial class TaskType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -119,17 +121,12 @@ namespace PSAPI.Migrations
                     b.Property<long?>("ProcessId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("ProcessTaskTypeId")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("StatusId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ProcessId");
-
-                    b.HasIndex("ProcessTaskTypeId");
 
                     b.HasIndex("StatusId");
 
@@ -182,6 +179,11 @@ namespace PSAPI.Migrations
                         .HasColumnType("bigint");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -247,19 +249,11 @@ namespace PSAPI.Migrations
                         .WithMany("ProcessTasks")
                         .HasForeignKey("ProcessId");
 
-                    b.HasOne("Model.ProcessTaskType", "ProcessTaskType")
-                        .WithMany()
-                        .HasForeignKey("ProcessTaskTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Model.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("ProcessTaskType");
 
                     b.Navigation("Status");
                 });

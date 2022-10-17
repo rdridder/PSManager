@@ -4,8 +4,8 @@ namespace PSDTO
 {
     public class ProcessTaskDefinitionUpdateDTO : ProcessTaskDefinitionCreateDTO
     {
-        public ProcessTaskDefinitionUpdateDTO(long id, string name, string description, string key, bool isEnabled)
-            : base(name, description, key, isEnabled)
+        public ProcessTaskDefinitionUpdateDTO(long id, string name, string description, string key, bool isEnabled, string processTaskType)
+            : base(name, description, key, isEnabled, processTaskType)
         {
             Id = id;
         }

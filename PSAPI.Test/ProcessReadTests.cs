@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using PSDTO.enums;
 
 namespace PSAPI.Test
 {
@@ -22,6 +23,7 @@ namespace PSAPI.Test
                     list[i - 1].Id.ShouldBe(i);
                     list[i - 1].Name.ShouldBe($"Process name {i}");
                     list[i - 1].IsReplayable.ShouldBeTrue();
+                    list[i - 1].Status.ShouldBe(StatusEnum.open.ToString());
                 }
             }
         }
@@ -43,6 +45,8 @@ namespace PSAPI.Test
                     result.ProcessTasks[j].Name.ShouldBe($"Process task definition name {j + 1}");
                     result.ProcessTasks[j].Key.ShouldBe($"process_task_{j + 1}");
                     result.ProcessTasks[j].Order.ShouldBe(j + 1);
+                    result.ProcessTasks[j].Status.ShouldBe(StatusEnum.open.ToString());
+                    result.ProcessTasks[j].ProcessTaskType.ShouldBe(TaskTypeEnum.messageBus.ToString());
                 }
             }
         }
@@ -103,6 +107,8 @@ namespace PSAPI.Test
                         list[i - 1].ProcessTasks[j - 1].Name.ShouldBe($"Process task definition name {j}");
                         list[i - 1].ProcessTasks[j - 1].Key.ShouldBe($"process_task_{j}");
                         list[i - 1].ProcessTasks[j - 1].Order.ShouldBe(j);
+                        list[i - 1].ProcessTasks[j - 1].Status.ShouldBe(StatusEnum.open.ToString());
+                        list[i - 1].ProcessTasks[j - 1].ProcessTaskType.ShouldBe(TaskTypeEnum.messageBus.ToString());
                     }
                 }
             }

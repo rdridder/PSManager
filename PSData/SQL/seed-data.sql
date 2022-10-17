@@ -1,4 +1,13 @@
-﻿insert into [ProcessDefinitions] ([Name], [Description], [IsEnabled], [IsReplayable]) values
+﻿insert into [Status] ([Name]) values
+('open'),
+('running'),
+('success'),
+('failed');
+
+insert into [ProcessTaskType] ([Name]) values
+('messageBus');
+
+insert into [ProcessDefinitions] ([Name], [Description], [IsEnabled], [IsReplayable]) values
 ('Process 1', 'Process 1 description', 1, 1),
 ('Process 2', 'Process 2 description', 1, 1),
 ('Process 3', 'Process 3 description', 1, 1),
@@ -21,12 +30,12 @@
 ('Process 20', 'Process 20 description', 1, 1),
 ('Process 21', 'Process 21 description', 1, 1);
 
-insert into [ProcessTaskDefinition] ([Name], [Description], [key], [IsEnabled]) values
-('Process task 1', 'Process task 1 description', 'process_task_1', 1),
-('Process task 2', 'Process task 2 description', 'process_task_2', 1),
-('Process task 3', 'Process task 3 description', 'process_task_3', 1),
-('Process task 4', 'Process task 4 description', 'process_task_4', 1),
-('Process task 5', 'Process task 5 description', 'process_task_5', 1);
+insert into [ProcessTaskDefinition] ([Name], [Description], [key], [IsEnabled], [ProcessTaskTypeId]) values
+('Process task 1', 'Process task 1 description', 'process_task_1', 1, 1),
+('Process task 2', 'Process task 2 description', 'process_task_2', 1, 1),
+('Process task 3', 'Process task 3 description', 'process_task_3', 1, 1),
+('Process task 4', 'Process task 4 description', 'process_task_4', 1, 1),
+('Process task 5', 'Process task 5 description', 'process_task_5', 1, 1);
 
 insert into ProcessDefinitionTaskDefinition ([ProcessDefinitionId],[ProcessTaskDefinitionId]) values
 (1,1),

@@ -91,6 +91,19 @@ namespace PSAPI.Test
             return result;
         }
 
+        private List<ProcessTaskType> GetTaskTypes()
+        {
+            var result = new List<ProcessTaskType>();
+            foreach (var val in Enum.GetValues(typeof(TaskTypeEnum)))
+            {
+                result.Add(new ProcessTaskType()
+                {
+                    Name = val.ToString()
+                });
+            }
+            return result;
+        }
+
         private List<ProcessDefinition> GetProcessDefinitions()
         {
             var processDefinitions = new List<ProcessDefinition>();
@@ -130,7 +143,7 @@ namespace PSAPI.Test
             return processDefinitions;
         }
 
-        private List<ProcessTaskDefinition> GetProcessTaskDefinitions()
+        private List<ProcessTaskDefinition> GetProcessTaskDefinitions(ProcessTaskType processTaskType)
         {
             var processTaskDefintions = new List<ProcessTaskDefinition>() {
                 new ProcessTaskDefinition() {
@@ -138,14 +151,16 @@ namespace PSAPI.Test
                     Description = "Process task definition description 1",
                     IsEnabled = true,
                     Name = "Process task definition name 1",
-                    Key = "process_task_1"
+                    Key = "process_task_1",
+                    ProcessTaskType = processTaskType
                 },
                 new ProcessTaskDefinition() {
                     Id = 2,
                     Description = "Process task definition description 2",
                     IsEnabled = true,
                     Name = "Process task definition name 2",
-                    Key = "process_task_2"
+                    Key = "process_task_2",
+                    ProcessTaskType = processTaskType
                 }
             };
             return processTaskDefintions;
@@ -156,7 +171,10 @@ namespace PSAPI.Test
             using (var context = CreateContext())
             {
                 context.Database.EnsureCreated();
-                context.AddRange(GetProcessTaskDefinitions());
+                context.AddRange(GetTaskTypes());
+                context.SaveChanges();
+                var processTaskType = await context.ProcessTaskType.Where(x => x.Name == TaskTypeEnum.messageBus.ToString()).FirstAsync();
+                context.AddRange(GetProcessTaskDefinitions(processTaskType));
                 context.SaveChanges();
                 context.AddRange(GetProcessDefinitions());
                 context.SaveChanges();

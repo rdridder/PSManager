@@ -15,5 +15,7 @@ namespace Model
         public string Key { get; set; }
 
         public Status Status { get; set; }
+
+        public ProcessTaskType ProcessTaskType { get; set; }
     }
 }

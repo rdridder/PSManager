@@ -20,5 +20,7 @@ namespace Model
         public bool IsEnabled { get; set; }
 
         public virtual List<ProcessDefinitionTaskDefinition> ProcessDefinitionTaskDefinitions { get; set; }
+
+        public ProcessTaskType ProcessTaskType { get; set; }
     }
 }

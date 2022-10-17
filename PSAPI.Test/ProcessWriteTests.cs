@@ -32,6 +32,7 @@ namespace PSAPI.Test
                     task.Name.ShouldBe($"Process task definition name {i}");
                     task.Key.ShouldBe($"process_task_{i}");
                     task.Status.ShouldBe(StatusEnum.open.ToString());
+                    task.ProcessTaskType.ShouldBe(TaskTypeEnum.messageBus.ToString());
                     i++;
                 }
             }
@@ -54,6 +55,8 @@ namespace PSAPI.Test
                 processObject.Status.ShouldBe(StatusEnum.running.ToString());
                 processObject.ProcessTasks[0].Status.ShouldBe(StatusEnum.running.ToString());
                 processObject.ProcessTasks[1].Status.ShouldBe(StatusEnum.open.ToString());
+                processObject.ProcessTasks[0].ProcessTaskType.ShouldBe(TaskTypeEnum.messageBus.ToString());
+                processObject.ProcessTasks[1].ProcessTaskType.ShouldBe(TaskTypeEnum.messageBus.ToString());
             }
         }
     }
