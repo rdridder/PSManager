@@ -9,6 +9,7 @@ namespace PSAPI.AutoMapper
         public Process Convert(ProcessDefinition source, Process destination, ResolutionContext context)
         {
             var status = (Status)context.Items["OpenStatus"];
+
             var tasks = new List<ProcessTask>();
             if (source.ProcessDefinitionTaskDefinitions != null)
             {
@@ -20,7 +21,8 @@ namespace PSAPI.AutoMapper
                         Key = processDefinitionTaskDefinitions.ProcessTaskDefinition.Key,
                         Name = processDefinitionTaskDefinitions.ProcessTaskDefinition.Name,
                         Order = processDefinitionTaskDefinitions.Order,
-                        Status = status
+                        Status = status,
+                        ProcessTaskType = processDefinitionTaskDefinitions.ProcessTaskDefinition.ProcessTaskType
                     });
                 }
             }

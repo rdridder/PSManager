@@ -35,7 +35,11 @@ namespace PSServices
 
         public async Task<CreatedIdDTO> AddProcessTaskDefinition(ProcessTaskDefinitionCreateDTO processTaskDefinitionCreateDTO)
         {
-            var processTaskDefinition = _mapper.Map<ProcessTaskDefinition>(processTaskDefinitionCreateDTO);
+            var processTaskType = await _processContext.ProcessTaskType.Where(x => x.Name == TaskTypeEnum.messageBus.ToString()).FirstOrDefaultAsync();
+            var processTaskDefinition = _mapper.Map<ProcessTaskDefinition>(processTaskDefinitionCreateDTO, opts =>
+            {
+                opts.Items["ProcessTaskType"] = processTaskType;
+            });
             await _processContext.AddAsync(processTaskDefinition);
             await _processContext.SaveChangesAsync();
             return new CreatedIdDTO(processTaskDefinition.Id);
@@ -91,6 +95,9 @@ namespace PSServices
             var result = await _processContext.Processes
                 .Where(x => x.Id == id)
                 .Include(x => x.ProcessTasks.OrderBy(x => x.Order))
+                .ThenInclude(x => x.ProcessTaskType)
+                .Include(x => x.ProcessTasks.OrderBy(x => x.Order))
+                .ThenInclude(x => x.Status)
                 .FirstOrDefaultAsync();
             return _mapper.Map<ProcessDTO>(result);
         }
@@ -101,6 +108,7 @@ namespace PSServices
                 .Where(x => x.Id == id)
                 .Include(x => x.ProcessDefinitionTaskDefinitions)
                 .ThenInclude(x => x.ProcessTaskDefinition)
+                .ThenInclude(x => x.ProcessTaskType)
                 .FirstOrDefaultAsync();
             return _mapper.Map<ProcessDefinitionDTO>(result);
         }
@@ -113,6 +121,7 @@ namespace PSServices
                 .Take(_limit)
                 .Include(x => x.ProcessDefinitionTaskDefinitions)
                 .ThenInclude(x => x.ProcessTaskDefinition)
+                .ThenInclude(x => x.ProcessTaskType)
                 .ToListAsync();
             return _mapper.Map<List<ProcessDefinitionDTO>>(result);
         }
@@ -124,6 +133,9 @@ namespace PSServices
                 .Skip(skip)
                 .Take(_limit)
                 .Include(x => x.ProcessTasks)
+                .ThenInclude(x => x.ProcessTaskType)
+                .Include(x => x.ProcessTasks)
+                .ThenInclude(x => x.Status)
                 .ToListAsync();
             return _mapper.Map<List<ProcessDTO>>(result);
         }
@@ -134,6 +146,7 @@ namespace PSServices
             var result = await _processContext.Processes
                 .Skip(skip)
                 .Take(_limit)
+                .Include(x => x.Status)
                 .ToListAsync();
             return _mapper.Map<List<ProcessListDTO>>(result);
         }
@@ -141,7 +154,9 @@ namespace PSServices
         public async Task<ProcessTaskDefinitionDTO> GetProcessTaskDefinition(long id)
         {
             var result = await _processContext.ProcessTaskDefinition
-                .Where(x => x.Id == id).FirstOrDefaultAsync();
+                .Where(x => x.Id == id)
+                .Include(x => x.ProcessTaskType)
+                .FirstOrDefaultAsync();
             return _mapper.Map<ProcessTaskDefinitionDTO>(result);
         }
 
@@ -209,10 +224,18 @@ namespace PSServices
             var result = await _processContext.ProcessDefinitions
                 .Where(x => x.Name == startProcess.Name)
                 .Include(x => x.ProcessDefinitionTaskDefinitions)
-                .ThenInclude(x => x.ProcessTaskDefinition).FirstOrDefaultAsync();
+                .ThenInclude(x => x.ProcessTaskDefinition)
+                .ThenInclude(x => x.ProcessTaskType)
+                .FirstOrDefaultAsync();
 
             var openStatus = await _processContext.Status.Where(x => x.Name == StatusEnum.open.ToString()).FirstOrDefaultAsync();
-            var process = _mapper.Map<Process>(result, opts => opts.Items["OpenStatus"] = openStatus);
+            var processTaskType = await _processContext.ProcessTaskType.Where(x => x.Name == TaskTypeEnum.messageBus.ToString()).FirstOrDefaultAsync();
+
+            var process = _mapper.Map<Process>(result, opts =>
+            {
+                opts.Items["OpenStatus"] = openStatus;
+                opts.Items["ProcessTaskType"] = processTaskType;
+            });
             _processContext.Add(process);
             await _processContext.SaveChangesAsync();
             return new CreatedIdDTO(process.Id);
@@ -252,11 +275,15 @@ namespace PSServices
             return _processContext.SaveChangesAsync();
         }
 
-        public Task UpdateProcessTaskDefinition(ProcessTaskDefinitionUpdateDTO processTaskDefinitionUpdateDTO)
+        public async Task UpdateProcessTaskDefinition(ProcessTaskDefinitionUpdateDTO processTaskDefinitionUpdateDTO)
         {
-            var processTaskDefinition = _mapper.Map<ProcessTaskDefinition>(processTaskDefinitionUpdateDTO);
+            var processTaskType = await _processContext.ProcessTaskType.Where(x => x.Name == processTaskDefinitionUpdateDTO.ProcessTaskType).FirstOrDefaultAsync();
+            var processTaskDefinition = _mapper.Map<ProcessTaskDefinition>(processTaskDefinitionUpdateDTO, opts =>
+            {
+                opts.Items["ProcessTaskType"] = processTaskType;
+            });
             _processContext.Update(processTaskDefinition);
-            return _processContext.SaveChangesAsync();
+            await _processContext.SaveChangesAsync();
         }
     }
 }
