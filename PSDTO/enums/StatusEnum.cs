@@ -1,4 +1,4 @@
-﻿namespace PSDTO.enums
+﻿namespace PSDTO.Enums
 {
     public enum StatusEnum
     {

@@ -9,7 +9,7 @@ using PSAPI.AutoMapper;
 using PSAPI.Controllers;
 using PSData.Context;
 using PSDTO;
-using PSDTO.enums;
+using PSDTO.Enums;
 using PSServices;
 
 namespace PSAPI.Test

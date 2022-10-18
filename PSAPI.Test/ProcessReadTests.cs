@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using PSDTO.enums;
+using PSDTO.Enums;
 
 namespace PSAPI.Test
 {
