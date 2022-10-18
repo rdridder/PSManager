@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Model;
 using PSData.Context;
 using PSDTO;
-using PSDTO.enums;
+using PSDTO.Enums;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
