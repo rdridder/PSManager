@@ -13,7 +13,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PSData", "PSData\PSData.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PSAPI.Test", "PSAPI.Test\PSAPI.Test.csproj", "{97430E51-B4CD-4555-97BC-14C36D60B7F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSServices", "PSServices\PSServices.csproj", "{F29A6585-A570-46D3-8BE2-2E13B6F83BE8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PSServices", "PSServices\PSServices.csproj", "{F29A6585-A570-46D3-8BE2-2E13B6F83BE8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PSAZServiceBus", "PSAZServiceBus\PSAZServiceBus.csproj", "{12A45500-94A6-443F-B43A-43A0F7DC44F4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ExampleProjects", "ExampleProjects", "{00D26FED-78A4-440C-9722-790347DAA159}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleWorkers", "ExampleWorkers\ExampleWorkers.csproj", "{90300E99-76AA-4474-8462-3A9683396810}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,9 +51,20 @@ Global
 		{F29A6585-A570-46D3-8BE2-2E13B6F83BE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F29A6585-A570-46D3-8BE2-2E13B6F83BE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F29A6585-A570-46D3-8BE2-2E13B6F83BE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12A45500-94A6-443F-B43A-43A0F7DC44F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12A45500-94A6-443F-B43A-43A0F7DC44F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12A45500-94A6-443F-B43A-43A0F7DC44F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12A45500-94A6-443F-B43A-43A0F7DC44F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90300E99-76AA-4474-8462-3A9683396810}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90300E99-76AA-4474-8462-3A9683396810}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90300E99-76AA-4474-8462-3A9683396810}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90300E99-76AA-4474-8462-3A9683396810}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{90300E99-76AA-4474-8462-3A9683396810} = {00D26FED-78A4-440C-9722-790347DAA159}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DA9FFAE4-CD5B-41C3-832D-7BD49C68E0A4}
