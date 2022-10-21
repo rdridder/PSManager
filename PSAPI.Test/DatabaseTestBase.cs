@@ -99,7 +99,7 @@ namespace PSAPI.Test
         private List<ProcessTaskType> GetTaskTypes()
         {
             var result = new List<ProcessTaskType>();
-            foreach (var val in Enum.GetValues(typeof(TaskTypeEnum)))
+            foreach (var val in Enum.GetValues(typeof(ProcessTaskTypeEnum)))
             {
                 result.Add(new ProcessTaskType()
                 {
@@ -178,7 +178,7 @@ namespace PSAPI.Test
                 context.Database.EnsureCreated();
                 context.AddRange(GetTaskTypes());
                 context.SaveChanges();
-                var processTaskType = await context.ProcessTaskType.Where(x => x.Name == TaskTypeEnum.messageBus.ToString()).FirstAsync();
+                var processTaskType = await context.ProcessTaskType.Where(x => x.Name == ProcessTaskTypeEnum.messageBus.ToString()).FirstAsync();
                 context.AddRange(GetProcessTaskDefinitions(processTaskType));
                 context.SaveChanges();
                 context.AddRange(GetProcessDefinitions());

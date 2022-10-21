@@ -28,7 +28,7 @@ namespace PSAPI.Test
             using (var context = CreateContext())
             {
                 var psController = CreateController(context);
-                var task = new ProcessTaskDefinitionCreateDTO("myTask1", "myTaskDesc1", "myTaskKey1", true, TaskTypeEnum.messageBus.ToString());
+                var task = new ProcessTaskDefinitionCreateDTO("myTask1", "myTaskDesc1", "myTaskKey1", true, ProcessTaskTypeEnum.messageBus.ToString());
                 var result = await psController.AddProcessTaskDefinition(task);
                 var objectResult = result.GetObjectResult();
                 objectResult.Id.ShouldBe(3);
@@ -40,7 +40,7 @@ namespace PSAPI.Test
                 taskObject.Description.ShouldBe("myTaskDesc1");
                 taskObject.Key.ShouldBe("myTaskKey1");
                 taskObject.IsEnabled.ShouldBeTrue();
-                taskObject.ProcessTaskType.ShouldBe(TaskTypeEnum.messageBus.ToString());
+                taskObject.ProcessTaskType.ShouldBe(ProcessTaskTypeEnum.messageBus.ToString());
             }
         }
 
@@ -57,7 +57,7 @@ namespace PSAPI.Test
                 var def = definition.GetObjectResult();
                 def.ProcessTaskDefinitions.Count.ShouldBe(1);
                 def.ProcessTaskDefinitions[0].Name.ShouldBe("Process task definition name 1");
-                def.ProcessTaskDefinitions[0].ProcessTaskType.ShouldBe(TaskTypeEnum.messageBus.ToString());
+                def.ProcessTaskDefinitions[0].ProcessTaskType.ShouldBe(ProcessTaskTypeEnum.messageBus.ToString());
             }
         }
     }

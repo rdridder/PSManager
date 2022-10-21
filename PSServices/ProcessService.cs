@@ -41,7 +41,7 @@ namespace PSServices
 
         public async Task<CreatedIdDTO> AddProcessTaskDefinition(ProcessTaskDefinitionCreateDTO processTaskDefinitionCreateDTO)
         {
-            var processTaskType = await _processContext.ProcessTaskType.Where(x => x.Name == TaskTypeEnum.messageBus.ToString()).FirstOrDefaultAsync();
+            var processTaskType = await _processContext.ProcessTaskType.Where(x => x.Name == ProcessTaskTypeEnum.messageBus.ToString()).FirstOrDefaultAsync();
             var processTaskDefinition = _mapper.Map<ProcessTaskDefinition>(processTaskDefinitionCreateDTO, opts =>
             {
                 opts.Items["ProcessTaskType"] = processTaskType;
@@ -235,7 +235,7 @@ namespace PSServices
                 .FirstOrDefaultAsync();
 
             var openStatus = await _processContext.Status.Where(x => x.Name == StatusEnum.open.ToString()).FirstOrDefaultAsync();
-            var processTaskType = await _processContext.ProcessTaskType.Where(x => x.Name == TaskTypeEnum.messageBus.ToString()).FirstOrDefaultAsync();
+            var processTaskType = await _processContext.ProcessTaskType.Where(x => x.Name == ProcessTaskTypeEnum.messageBus.ToString()).FirstOrDefaultAsync();
 
             var process = _mapper.Map<Process>(result, opts =>
             {
@@ -263,7 +263,7 @@ namespace PSServices
                 {
                     // TODO now only message bus, handle other scenario's
                     // Depending on the task, set the task in motion
-                    if (task.ProcessTaskType.Name.Equals(TaskTypeEnum.messageBus.ToString()))
+                    if (task.ProcessTaskType.Name.Equals(ProcessTaskTypeEnum.messageBus.ToString()))
                     {
                         // TODO no process data is sent
                         SendMessageToTask(process.Id.ToString(), task.Key);

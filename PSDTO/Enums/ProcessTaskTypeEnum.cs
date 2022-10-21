@@ -1,6 +1,6 @@
 ﻿namespace PSDTO.Enums
 {
-    public enum TaskTypeEnum
+    public enum ProcessTaskTypeEnum
     {
         messageBus
     }

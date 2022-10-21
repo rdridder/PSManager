@@ -46,7 +46,7 @@ namespace PSAPI.Test
                     result.ProcessTasks[j].Key.ShouldBe($"process_task_{j + 1}");
                     result.ProcessTasks[j].Order.ShouldBe(j + 1);
                     result.ProcessTasks[j].Status.ShouldBe(StatusEnum.open.ToString());
-                    result.ProcessTasks[j].ProcessTaskType.ShouldBe(TaskTypeEnum.messageBus.ToString());
+                    result.ProcessTasks[j].ProcessTaskType.ShouldBe(ProcessTaskTypeEnum.messageBus.ToString());
                 }
             }
         }
@@ -108,7 +108,7 @@ namespace PSAPI.Test
                         list[i - 1].ProcessTasks[j - 1].Key.ShouldBe($"process_task_{j}");
                         list[i - 1].ProcessTasks[j - 1].Order.ShouldBe(j);
                         list[i - 1].ProcessTasks[j - 1].Status.ShouldBe(StatusEnum.open.ToString());
-                        list[i - 1].ProcessTasks[j - 1].ProcessTaskType.ShouldBe(TaskTypeEnum.messageBus.ToString());
+                        list[i - 1].ProcessTasks[j - 1].ProcessTaskType.ShouldBe(ProcessTaskTypeEnum.messageBus.ToString());
                     }
                 }
             }
