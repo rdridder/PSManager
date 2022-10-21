@@ -7,6 +7,7 @@ using Model;
 using Moq;
 using PSAPI.AutoMapper;
 using PSAPI.Controllers;
+using PSAPI.Test.Mock;
 using PSData.Context;
 using PSDTO;
 using PSDTO.Enums;
@@ -20,6 +21,8 @@ namespace PSAPI.Test
 
         protected readonly IMapper _mapper;
 
+        protected readonly MockAZServiceBus _serviceBus;
+
         protected readonly IConfiguration _config;
 
         protected readonly SqliteConnection _connection;
@@ -31,6 +34,7 @@ namespace PSAPI.Test
             _logger = new Mock<ILogger<PSController>>().Object;
             _mapper = new Mapper(GetMapperConfig());
             _mapper.ConfigurationProvider.AssertConfigurationIsValid();
+            _serviceBus = new MockAZServiceBus();
             _config = new ConfigurationBuilder()
             .AddInMemoryCollection(GetConfig())
             .Build();
@@ -53,7 +57,8 @@ namespace PSAPI.Test
 
         public PSController CreateController(ProcessContext context)
         {
-            var processService = new ProcessService(context, _mapper);
+            var messageService = new MockMessageService(_serviceBus);
+            var processService = new ProcessService(context, _mapper, messageService);
             var psController = new PSController(_logger, _mapper, _config, processService);
             return psController;
         }

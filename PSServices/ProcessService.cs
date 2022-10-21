@@ -4,6 +4,8 @@ using Model;
 using PSData.Context;
 using PSDTO;
 using PSDTO.Enums;
+using PSDTO.Messaging;
+using PSInterfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,14 +16,18 @@ namespace PSServices
     {
         private readonly ProcessContext _processContext;
 
+        private readonly IMessageService _messageService;
+
         private readonly IMapper _mapper;
 
         private readonly int _limit;
 
-        public ProcessService(ProcessContext processContext, IMapper mapper, int limit = 5)
+        public ProcessService(ProcessContext processContext, IMapper mapper,
+                              IMessageService messageService, int limit = 5)
         {
             _processContext = processContext;
             _mapper = mapper;
+            _messageService = messageService;
             _limit = limit;
         }
 
@@ -255,6 +261,13 @@ namespace PSServices
             {
                 if (task.Status.Name.Equals(StatusEnum.open.ToString()))
                 {
+                    // TODO now only message bus, handle other scenario's
+                    // Depending on the task, set the task in motion
+                    if (task.ProcessTaskType.Name.Equals(TaskTypeEnum.messageBus.ToString()))
+                    {
+                        // TODO no process data is sent
+                        SendMessageToTask(process.Id.ToString(), task.Key);
+                    }
                     // Set the first open task to running
                     task.Status = runningStatus;
                     break;
@@ -284,6 +297,13 @@ namespace PSServices
             });
             _processContext.Update(processTaskDefinition);
             await _processContext.SaveChangesAsync();
+        }
+
+        private void SendMessageToTask(string correlationId, string queueName)
+        {
+            Dictionary<string, string> messageBody = new Dictionary<string, string>();
+            var messageDTO = new MessageDTO(correlationId, messageBody);
+            _messageService.SendMessage(messageDTO, queueName);
         }
     }
 }

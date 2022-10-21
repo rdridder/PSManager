@@ -2,8 +2,6 @@ using Azure.Messaging.ServiceBus;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using PSAZServiceBus.Services;
-using System.Collections.Generic;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace PSAZServiceBus
@@ -26,10 +24,8 @@ namespace PSAZServiceBus
 
 
 
-            var bodyText = System.Text.Encoding.UTF8.GetString(message.Body);
-            var body = JsonSerializer.Deserialize<Dictionary<string, string>>(bodyText);
 
-            _logger.LogInformation($"C# ServiceBus topic trigger function processed message: {bodyText}");
+            _logger.LogInformation($"C# ServiceBus topic trigger function processed message:");
         }
     }
 }

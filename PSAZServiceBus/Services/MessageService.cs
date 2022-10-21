@@ -1,6 +1,7 @@
 ﻿using Azure.Messaging.ServiceBus;
 using PSDTO.Messaging;
 using PSInterfaces;
+using PSServices;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
@@ -8,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace PSAZServiceBus.Services
 {
-    public class MessageService : IMessageService<ServiceBusReceivedMessage, ServiceBusMessage>
+    public class MessageService : IMessageService
     {
-        private ServiceBusClient _client;
+        private readonly IMessageBusFactory<ServiceBusSender> _factory;
 
-        public MessageService(ServiceBusClient client)
+        public MessageService(IMessageBusFactory<ServiceBusSender> factory)
         {
-            _client = client;
+            _factory = factory;
         }
 
         public async Task<MessageDTO> ConvertMessageToDTO(ServiceBusReceivedMessage message)
@@ -37,9 +38,11 @@ namespace PSAZServiceBus.Services
             return message;
         }
 
-        public Task SendMessage(MessageDTO message, string queueName)
+        public async Task SendMessage(MessageDTO message, string queueName)
         {
-            throw new System.NotImplementedException();
+            var sender = _factory.GetClient(queueName);
+            var serviceBusMessage = await ConvertDTOToMessage(message);
+            await sender.SendMessageAsync(serviceBusMessage);
         }
     }
 }
