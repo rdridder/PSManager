@@ -268,7 +268,7 @@ namespace PSServices
                     if (task.ProcessTaskType.Name.Equals(ProcessTaskTypeEnum.messageBus.ToString()))
                     {
                         // TODO no process data is sent
-                        SendMessageToTask(process.Id.ToString(), task.Key);
+                        SendMessageToTask(process.Id, task.Id, task.Key);
                     }
                     // Set the first open task to running
                     task.Status = runningStatus;
@@ -301,11 +301,10 @@ namespace PSServices
             await _processContext.SaveChangesAsync();
         }
 
-        private void SendMessageToTask(string correlationId, string queueName)
+        private void SendMessageToTask(long processId, long taskId, string queueName)
         {
-            Dictionary<string, string> messageBody = new Dictionary<string, string>();
-            var messageDTO = new MessageDTO(correlationId, messageBody);
-            _messageService.SendMessage(messageDTO, queueName);
+            var startTaskMessageDTO = new StartTaskMessageDTO(processId, taskId);
+            _messageService.SendStartTaskMessage(startTaskMessageDTO, queueName);
         }
     }
 }

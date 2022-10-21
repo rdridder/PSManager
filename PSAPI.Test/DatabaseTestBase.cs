@@ -57,7 +57,7 @@ namespace PSAPI.Test
 
         public PSController CreateController(ProcessContext context)
         {
-            var messageService = new MockMessageService(_serviceBus);
+            var messageService = new MockAZMessageService(_serviceBus);
             var processService = new ProcessService(context, _mapper, messageService);
             var psController = new PSController(_logger, _mapper, _config, processService);
             return psController;

@@ -19,8 +19,8 @@ namespace PSAZServiceBus
         public async Task Run([ServiceBusTrigger("%AzServiceBusTaskFinishedQueue%", Connection = "AzServiceBusConnectionString")] ServiceBusReceivedMessage message,
             ExecutionContext executionContext)
         {
-            var messageService = new MessageService(null);
-            var dto = await messageService.ConvertMessageToDTO(message);
+            var messageService = new AZMessageService(null);
+            //var dto = await messageService.ConvertMessageToDTO(message);
 
 
 

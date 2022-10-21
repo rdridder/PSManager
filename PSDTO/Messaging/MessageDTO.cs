@@ -2,12 +2,12 @@
 
 namespace PSDTO.Messaging
 {
-    public class MessageDTO
+    public abstract class MessageDTO
     {
-        public MessageDTO(string correlationId, Dictionary<string, string> messageBody)
+        public MessageDTO(string correlationId)
         {
             CorrelationId = correlationId;
-            MessageBody = messageBody;
+            MessageBody = new Dictionary<string, string>();
         }
 
         public string CorrelationId { get; }

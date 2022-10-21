@@ -37,10 +37,10 @@ builder.Services.AddAzureClients(clientFactoryBuilder =>
     clientFactoryBuilder.AddServiceBusClient(builder.Configuration.GetConnectionString("ServiceBus"));
 });
 // Add a factory to create the senders
-builder.Services.AddSingleton<IMessageBusFactory<ServiceBusSender>, AzureServiceBusFactory>();
+builder.Services.AddSingleton<IMessageBusFactory<ServiceBusSender>, AZServiceBusFactory>();
 
 // Inject the message service
-builder.Services.AddSingleton<IMessageService, MessageService>();
+builder.Services.AddSingleton<IMessageService, AZMessageService>();
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.

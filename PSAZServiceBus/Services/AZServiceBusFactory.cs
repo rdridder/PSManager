@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 
 namespace PSAZServiceBus.Services
 {
-    public class AzureServiceBusFactory : IMessageBusFactory<ServiceBusSender>, IAsyncDisposable
+    public class AZServiceBusFactory : IMessageBusFactory<ServiceBusSender>, IAsyncDisposable
     {
         private readonly object _lockObject;
 
         private readonly ServiceBusClient _serviceBusClient;
 
-        private readonly ILogger<AzureServiceBusFactory> _log;
+        private readonly ILogger<AZServiceBusFactory> _log;
 
         private readonly ConcurrentDictionary<string, ServiceBusSender> _senders;
 
-        public AzureServiceBusFactory(ServiceBusClient serviceBusClient, ILogger<AzureServiceBusFactory> log)
+        public AZServiceBusFactory(ServiceBusClient serviceBusClient, ILogger<AZServiceBusFactory> log)
         {
             _serviceBusClient = serviceBusClient;
             _log = log;

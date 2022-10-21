@@ -4,7 +4,9 @@ namespace PSInterfaces
 {
     public interface IMessageService
     {
-        public Task SendMessage(MessageDTO messageDTO, string queueName);
+        public Task SendStartTaskMessage(StartTaskMessageDTO messageDTO, string queueName);
+
+        public Task SendTaskFinishedMessage(TaskFinishedMessageDTO messageDTO, string queueName);
 
         //public Task<MessageDTO> ConvertMessageToDTO(MessageToDTO message);
 
