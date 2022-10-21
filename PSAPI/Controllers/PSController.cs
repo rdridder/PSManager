@@ -14,14 +14,16 @@ namespace PSAPI.Controllers
     {
         private readonly IProcessService _processService;
 
+        // TODO remove mapper
         private readonly IMapper _mapper;
 
+        // TODO variable is not used
         private readonly int _limit = 0;
 
         private readonly ILogger<PSController> _logger;
 
         public PSController(ILogger<PSController> logger, IMapper mapper,
-                                IConfiguration configuration, IProcessService processService)
+                            IConfiguration configuration, IProcessService processService)
         {
             _logger = logger;
             _mapper = mapper;
