@@ -9,8 +9,8 @@ using PSAPI.AutoMapper;
 using PSAPI.Controllers;
 using PSAPI.Test.Mock;
 using PSData.Context;
-using PSDTO;
 using PSDTO.Enums;
+using PSDTO.Process;
 using PSServices;
 
 namespace PSAPI.Test

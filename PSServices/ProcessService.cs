@@ -5,6 +5,8 @@ using PSData.Context;
 using PSDTO;
 using PSDTO.Enums;
 using PSDTO.Messaging;
+using PSDTO.Process;
+using PSDTO.ProcessDefinition;
 using PSInterfaces;
 using System.Collections.Generic;
 using System.Linq;

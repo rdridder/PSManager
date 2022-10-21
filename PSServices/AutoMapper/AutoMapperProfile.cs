@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Model;
 using PSDTO;
+using PSDTO.Process;
+using PSDTO.ProcessDefinition;
 using PSServices.AutoMapper;
 
 namespace PSAPI.AutoMapper

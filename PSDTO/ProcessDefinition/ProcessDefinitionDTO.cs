@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace PSDTO
+namespace PSDTO.ProcessDefinition
 {
     public class ProcessDefinitionDTO
     {

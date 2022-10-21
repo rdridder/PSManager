@@ -1,4 +1,6 @@
 ﻿using PSDTO;
+using PSDTO.Process;
+using PSDTO.ProcessDefinition;
 
 namespace PSInterfaces
 {

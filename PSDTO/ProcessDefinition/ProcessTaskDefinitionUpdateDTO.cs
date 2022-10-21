@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PSDTO
+namespace PSDTO.ProcessDefinition
 {
     public class ProcessTaskDefinitionUpdateDTO : ProcessTaskDefinitionCreateDTO
     {

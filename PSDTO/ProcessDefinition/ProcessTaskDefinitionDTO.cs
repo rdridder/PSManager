@@ -1,4 +1,4 @@
-﻿namespace PSDTO
+﻿namespace PSDTO.ProcessDefinition
 {
     public class ProcessTaskDefinitionDTO
     {

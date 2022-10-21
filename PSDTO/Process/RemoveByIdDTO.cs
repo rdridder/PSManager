@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace PSDTO
+namespace PSDTO.Process
 {
     public class RemoveByIdDTO
     {

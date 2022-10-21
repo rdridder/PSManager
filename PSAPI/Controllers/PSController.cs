@@ -1,6 +1,8 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PSDTO;
+using PSDTO.Process;
+using PSDTO.ProcessDefinition;
 using PSInterfaces;
 
 namespace PSAPI.Controllers

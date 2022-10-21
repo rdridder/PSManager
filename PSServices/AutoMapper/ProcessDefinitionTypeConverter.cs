@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Model;
-using PSDTO;
+using PSDTO.ProcessDefinition;
 using System.Collections.Generic;
 using System.Linq;
 
