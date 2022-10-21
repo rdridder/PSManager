@@ -1,4 +1,4 @@
-﻿namespace PSServices
+﻿namespace PSInterfaces
 {
     public interface IMessageBusFactory<T>
     {

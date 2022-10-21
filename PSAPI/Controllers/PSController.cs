@@ -1,7 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PSDTO;
-using PSServices;
+using PSInterfaces;
 
 namespace PSAPI.Controllers
 {

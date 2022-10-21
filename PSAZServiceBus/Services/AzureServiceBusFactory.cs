@@ -1,6 +1,6 @@
 ﻿using Azure.Messaging.ServiceBus;
 using Microsoft.Extensions.Logging;
-using PSServices;
+using PSInterfaces;
 using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;

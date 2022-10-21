@@ -1,6 +1,5 @@
 ﻿using PSDTO.Messaging;
-using System.Threading.Tasks;
-// TODO fix namespace
+
 namespace PSInterfaces
 {
     public interface IMessageService

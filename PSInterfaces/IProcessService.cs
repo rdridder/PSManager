@@ -1,8 +1,6 @@
 ﻿using PSDTO;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace PSServices
+namespace PSInterfaces
 {
     public interface IProcessService
     {

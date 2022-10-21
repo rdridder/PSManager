@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PSData\PSData.csproj" />
-    <ProjectReference Include="..\PSDTO\PSDTO.csproj" />
+    <ProjectReference Include="..\PSInterfaces\PSInterfaces.csproj" />
   </ItemGroup>
 
 </Project>
