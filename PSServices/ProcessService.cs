@@ -283,6 +283,28 @@ namespace PSServices
             return new ProcessStatusDTO(1);
         }
 
+        public async Task<ProcessStatusDTO> FinishProcessTask(FinishProcessTaskDTO finishProcessTaskDTO)
+        {
+            var process = await _processContext.Processes
+                .Where(x => x.Id == finishProcessTaskDTO.ProcessId)
+                .Include(x => x.ProcessTasks.OrderBy(x => x.Order))
+                .FirstAsync();
+
+            var taskStatus = await _processContext.Status.FirstAsync(x => x.Name == finishProcessTaskDTO.Status.ToString());
+            var task = process.ProcessTasks.Where(x => x.Id == finishProcessTaskDTO.TaskId).Single();
+            task.Status = taskStatus;
+            if (finishProcessTaskDTO.Status.Equals(SetTaskStatusEnum.failed))
+            {
+                process.Status = taskStatus;
+            }
+
+            _processContext.Update(process);
+            await _processContext.SaveChangesAsync();
+
+            // TODO fix
+            return new ProcessStatusDTO(1);
+        }
+
         public Task UpdateProcessDefinition(ProcessDefinitionUpdateDTO processDefinitionUpdateDTO)
         {
             var processDefinition = _mapper.Map<ProcessDefinition>(processDefinitionUpdateDTO);

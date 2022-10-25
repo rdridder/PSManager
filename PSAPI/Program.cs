@@ -1,4 +1,5 @@
 using Azure.Messaging.ServiceBus;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
 using PSAPI.AutoMapper;
@@ -7,6 +8,8 @@ using PSAZServiceBus.Services;
 using PSData.Context;
 using PSInterfaces;
 using PSServices;
+using System.Text.Json.Serialization;
+using MvcJsonOptions = Microsoft.AspNetCore.Mvc.JsonOptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +19,12 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Used for enums as strings in input
+// TODO, check if we can also use this for output
+builder.Services.Configure<JsonOptions>(o => o.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+builder.Services.Configure<MvcJsonOptions>(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+
 
 builder.Services.AddDbContext<ProcessContext>(opt =>
 // Uncomment to use in memory database

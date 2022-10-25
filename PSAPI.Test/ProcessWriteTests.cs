@@ -59,5 +59,64 @@ namespace PSAPI.Test
                 processObject.ProcessTasks[1].ProcessTaskType.ShouldBe(ProcessTaskTypeEnum.messageBus.ToString());
             }
         }
+
+
+        [Fact]
+        async Task TestFinishProcessTaskSuccess()
+        {
+            using (var context = CreateContext())
+            {
+                var processName = "Process name 1";
+                var psController = CreateController(context);
+                var start = new StartProcessDTO(processName);
+                var actionResult = await psController.StartProcess(start);
+                var startObject = actionResult.GetObjectResult();
+                var continueProcess = new ContinueProcessDTO(startObject.Id);
+                await psController.ContinueProcess(continueProcess);
+                var process = await psController.GetProcess(startObject.Id);
+                var processObject = process.GetObjectResult();
+
+                var firstOpenTask = processObject.ProcessTasks[0];
+                var finishDTO = new FinishProcessTaskDTO(processObject.Id, firstOpenTask.Id, SetTaskStatusEnum.success);
+
+                await psController.FinishProcessTask(finishDTO);
+
+                process = await psController.GetProcess(startObject.Id);
+                processObject = process.GetObjectResult();
+
+                processObject.Status.ShouldBe(StatusEnum.running.ToString());
+                processObject.ProcessTasks[0].Status.ShouldBe(StatusEnum.success.ToString());
+                processObject.ProcessTasks[1].Status.ShouldBe(StatusEnum.open.ToString());
+            }
+        }
+
+        [Fact]
+        async Task TestFinishProcessTaskFailed()
+        {
+            using (var context = CreateContext())
+            {
+                var processName = "Process name 1";
+                var psController = CreateController(context);
+                var start = new StartProcessDTO(processName);
+                var actionResult = await psController.StartProcess(start);
+                var startObject = actionResult.GetObjectResult();
+                var continueProcess = new ContinueProcessDTO(startObject.Id);
+                await psController.ContinueProcess(continueProcess);
+                var process = await psController.GetProcess(startObject.Id);
+                var processObject = process.GetObjectResult();
+
+                var firstOpenTask = processObject.ProcessTasks[0];
+                var finishDTO = new FinishProcessTaskDTO(processObject.Id, firstOpenTask.Id, SetTaskStatusEnum.failed);
+
+                await psController.FinishProcessTask(finishDTO);
+
+                process = await psController.GetProcess(startObject.Id);
+                processObject = process.GetObjectResult();
+
+                processObject.Status.ShouldBe(StatusEnum.failed.ToString());
+                processObject.ProcessTasks[0].Status.ShouldBe(StatusEnum.failed.ToString());
+                processObject.ProcessTasks[1].Status.ShouldBe(StatusEnum.open.ToString());
+            }
+        }
     }
 }

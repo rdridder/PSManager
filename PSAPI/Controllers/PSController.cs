@@ -210,6 +210,26 @@ namespace PSAPI.Controllers
             return BadRequest();
         }
 
+        [HttpPost("FinishProcessTask")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CreatedIdDTO))]
+        public async Task<ActionResult<ProcessStatusDTO>> FinishProcessTask(FinishProcessTaskDTO finishProcessTaskDTO)
+        {
+            if (ModelState.IsValid)
+            {
+                // TODO fix exception handling
+                try
+                {
+                    var result = await Task.FromResult(finishProcessTaskDTO);
+                    return await _processService.FinishProcessTask(finishProcessTaskDTO);
+                }
+                catch (Exception e)
+                {
+                    return BadRequest();
+                }
+            }
+            return BadRequest();
+        }
+
         [HttpPatch("UpdateProcessDefinition")]
         public async Task<IActionResult> UpdateProcessDefinition(ProcessDefinitionUpdateDTO processDefinitionUpdateDTO)
         {
