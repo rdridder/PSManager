@@ -39,5 +39,7 @@ namespace PSInterfaces
         public Task<CreatedIdDTO> StartProcess(StartProcessDTO startProcess);
 
         public Task<ProcessStatusDTO> ContinueProcess(ContinueProcessDTO continueProcess);
+
+        public Task<ProcessStatusDTO> FinishProcessTask(FinishProcessTaskDTO finishProcessTaskDTO);
     }
 }
