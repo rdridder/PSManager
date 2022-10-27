@@ -23,6 +23,8 @@ namespace PSAPI.Test
 
         protected readonly MockAZServiceBus _serviceBus;
 
+        protected readonly MockAZMessageService _messageService;
+
         protected readonly IConfiguration _config;
 
         protected readonly SqliteConnection _connection;
@@ -35,6 +37,7 @@ namespace PSAPI.Test
             _mapper = new Mapper(GetMapperConfig());
             _mapper.ConfigurationProvider.AssertConfigurationIsValid();
             _serviceBus = new MockAZServiceBus();
+            _messageService = new MockAZMessageService(_serviceBus);
             _config = new ConfigurationBuilder()
             .AddInMemoryCollection(GetConfig())
             .Build();
@@ -57,8 +60,7 @@ namespace PSAPI.Test
 
         public PSController CreateController(ProcessContext context)
         {
-            var messageService = new MockAZMessageService(_serviceBus);
-            var processService = new ProcessService(context, _mapper, messageService);
+            var processService = new ProcessService(context, _mapper, _messageService);
             var psController = new PSController(_logger, _mapper, _config, processService);
             return psController;
         }

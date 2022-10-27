@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "PSAZServiceBus": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7034",
+      "launchBrowser": false
+    }
+  }
+}

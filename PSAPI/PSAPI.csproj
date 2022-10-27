@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PSAZServiceBus\PSAZServiceBus.csproj" />
+    <ProjectReference Include="..\PSServices\PSServices.csproj" />
   </ItemGroup>
 
 </Project>
