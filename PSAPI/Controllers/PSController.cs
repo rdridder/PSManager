@@ -219,7 +219,6 @@ namespace PSAPI.Controllers
                 // TODO fix exception handling
                 try
                 {
-                    var result = await Task.FromResult(finishProcessTaskDTO);
                     return await _processService.FinishProcessTask(finishProcessTaskDTO);
                 }
                 catch (Exception e)
