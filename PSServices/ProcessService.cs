@@ -8,6 +8,7 @@ using PSDTO.Messaging;
 using PSDTO.Process;
 using PSDTO.ProcessDefinition;
 using PSInterfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -278,9 +279,8 @@ namespace PSServices
             _processContext.Update(process);
             await _processContext.SaveChangesAsync();
 
-
-            // TODO fix
-            return new ProcessStatusDTO(1);
+            var statusEnum = Enum.Parse<StatusEnum>(process.Status.Name);
+            return new ProcessStatusDTO(process.Id, statusEnum);
         }
 
         public async Task<ProcessStatusDTO> FinishProcessTask(FinishProcessTaskDTO finishProcessTaskDTO)
@@ -301,8 +301,8 @@ namespace PSServices
             _processContext.Update(process);
             await _processContext.SaveChangesAsync();
 
-            // TODO fix
-            return new ProcessStatusDTO(1);
+            var statusEnum = Enum.Parse<StatusEnum>(process.Status.Name);
+            return new ProcessStatusDTO(process.Id, statusEnum);
         }
 
         public Task UpdateProcessDefinition(ProcessDefinitionUpdateDTO processDefinitionUpdateDTO)

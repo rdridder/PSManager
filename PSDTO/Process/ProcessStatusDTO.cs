@@ -1,13 +1,17 @@
-﻿namespace PSDTO.Process
+﻿using PSDTO.Enums;
+
+namespace PSDTO.Process
 {
     public class ProcessStatusDTO
     {
-        // TODO fix
-        public ProcessStatusDTO(long id)
+        public ProcessStatusDTO(long processId, StatusEnum status)
         {
-            Id = id;
+            ProcessId = processId;
+            Status = status;
         }
 
-        public long Id { get; set; }
+        public long ProcessId { get; set; }
+
+        public StatusEnum Status { get; }
     }
 }

@@ -79,7 +79,10 @@ namespace PSAPI.Test
                 var firstOpenTask = processObject.ProcessTasks[0];
                 var finishDTO = new FinishProcessTaskDTO(processObject.Id, firstOpenTask.Id, SetTaskStatusEnum.success);
 
-                await psController.FinishProcessTask(finishDTO);
+                var output = await psController.FinishProcessTask(finishDTO);
+                var outputObject = output.GetObjectResult();
+                outputObject.Status.ShouldBe(StatusEnum.running);
+                outputObject.ProcessId.ShouldBe(startObject.Id);
 
                 process = await psController.GetProcess(startObject.Id);
                 processObject = process.GetObjectResult();
@@ -108,7 +111,10 @@ namespace PSAPI.Test
                 var firstOpenTask = processObject.ProcessTasks[0];
                 var finishDTO = new FinishProcessTaskDTO(processObject.Id, firstOpenTask.Id, SetTaskStatusEnum.failed);
 
-                await psController.FinishProcessTask(finishDTO);
+                var output = await psController.FinishProcessTask(finishDTO);
+                var outputObject = output.GetObjectResult();
+                outputObject.Status.ShouldBe(StatusEnum.failed);
+                outputObject.ProcessId.ShouldBe(startObject.Id);
 
                 process = await psController.GetProcess(startObject.Id);
                 processObject = process.GetObjectResult();
