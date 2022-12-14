@@ -297,7 +297,15 @@ namespace PSServices
             {
                 process.Status = taskStatus;
             }
-
+            else
+            {
+                // If the task has not failed and it is the last
+                // Set the process to success
+                if (process.ProcessTasks.Last().Id.Equals(task.Id))
+                {
+                    process.Status = taskStatus;
+                }
+            }
             _processContext.Update(process);
             await _processContext.SaveChangesAsync();
 
