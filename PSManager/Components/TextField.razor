@@ -1,0 +1,13 @@
+﻿@inherits InputBase<string>
+
+<div class="mb-3">
+    @if (!string.IsNullOrWhiteSpace(LabelKey))
+    {
+        <label for="@Id" class="form-control-label">@Loc[LabelKey]</label>
+    }
+    <input class="form-control @CssClass" id="@Id" @bind="@CurrentValue" />
+    @if (!string.IsNullOrWhiteSpace(DescriptionKey))
+    {
+        <div id="descriptionHelp" class="form-text">@Loc[DescriptionKey]</div>
+    }
+</div>

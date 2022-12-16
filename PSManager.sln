@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PSInterfaces", "PSInterface
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PSClient", "PSClient\PSClient.csproj", "{A3008BCA-F4A1-4AE6-B5AB-F965A0F23254}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSAZServiceBus", "PSAZServiceBus\PSAZServiceBus.csproj", "{55A011F2-DA06-4835-ACBC-F216746EB60A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PSAZServiceBus", "PSAZServiceBus\PSAZServiceBus.csproj", "{55A011F2-DA06-4835-ACBC-F216746EB60A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

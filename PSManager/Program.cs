@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Localization;
+using PSManager;
 using PSManager.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +18,8 @@ builder.Services.AddScoped(sp =>
         BaseAddress = new Uri("https://localhost:7136")
     });
 
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+builder.Services.AddScoped<IStringLocalizer<App>, StringLocalizer<App>>();
 
 
 var app = builder.Build();

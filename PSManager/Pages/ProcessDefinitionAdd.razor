@@ -1,0 +1,37 @@
+﻿@page "/process-definition-add"
+@using PSDTO.ProcessDefinition;
+@using PSManager.Components
+@using Microsoft.Extensions.Logging
+@inject ILogger<ProcessDefinitionAdd> Logger
+<h1>Add process definition</h1>
+<EditForm Model="@processDefinitionCreate" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <TextField @bind-Value="processDefinitionCreate.Name" Id="Name" LabelKey="ProcessDefinitionName" DescriptionKey="ProcessDefinitionNameDescription" />
+
+    <TextField @bind-Value="processDefinitionCreate.Description" Id="Name" LabelKey="ProcessDefinitionDescription" DescriptionKey="ProcessDefinitionDescriptionDescription" />
+
+    <div class="mb-3">
+        <label for="isEnabled" class="form-label">Is enabled</label>
+        <InputCheckbox id="isEnabled" class="form-check" @bind-Value="processDefinitionCreate.IsEnabled" />
+        <div id="isEnabledHelp" class="form-text">Is this process definition enabled, if not not processes will be spawned when requested.</div>
+    </div>
+    <div class="mb-3">
+        <label for="isReplayable" class="form-label">Is replayable</label>
+        <InputCheckbox id="isReplayable" class="form-check" @bind-Value="processDefinitionCreate.IsReplayable" />
+        <div id="isReplayableHelp" class="form-text">Is this process definition replayable, can the created processes be restarted.</div>
+    </div>
+    <button type="submit">Submit</button>
+</EditForm>
+
+@code {
+    private ProcessDefinitionCreateDTO processDefinitionCreate = new("","",false,false);
+
+    private void HandleValidSubmit()
+    {
+        Logger.LogInformation("HandleValidSubmit called");
+
+        // Process the valid form
+    }
+}
