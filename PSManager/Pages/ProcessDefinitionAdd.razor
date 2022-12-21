@@ -3,6 +3,8 @@
 @using PSManager.Components
 @using Microsoft.Extensions.Logging
 @inject ILogger<ProcessDefinitionAdd> Logger
+@inject HttpClient HttpClient
+
 <h1>Add process definition</h1>
 <EditForm Model="@processDefinitionCreate" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
@@ -28,10 +30,12 @@
 @code {
     private ProcessDefinitionCreateDTO processDefinitionCreate = new("","",false,false);
 
-    private void HandleValidSubmit()
+
+
+    private async Task HandleValidSubmit()
     {
         Logger.LogInformation("HandleValidSubmit called");
 
-        // Process the valid form
+        await HttpClient.PostAsJsonAsync("/PS/AddProcessDefinition/", processDefinitionCreate);
     }
 }

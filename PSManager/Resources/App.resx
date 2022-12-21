@@ -127,13 +127,13 @@
     <value>Enabled</value>
   </data>
   <data name="ProcessDefinitionIsEnabledDescription" xml:space="preserve">
-    <value>Is this process definition enabled, if not not processes will be spawned when requested.</value>
+    <value>Is this process definition enabled ? If not the processes will not be launched when requested.</value>
   </data>
   <data name="ProcessDefinitionIsReplayable" xml:space="preserve">
     <value>Is replayable</value>
   </data>
   <data name="ProcessDefinitionIsReplayableDescription" xml:space="preserve">
-    <value>Is this process definition replayable, can the created processes be restarted.</value>
+    <value>Is this process definition replayable ? Can the created processes be restarted ?</value>
   </data>
   <data name="ProcessDefinitionName" xml:space="preserve">
     <value>Name</value>
