@@ -3,7 +3,7 @@ using PSDTO.ProcessDefinition;
 
 namespace PSManager.Components
 {
-    public partial class ProcessDefinitionOverview
+    public partial class ProcessDefinitionListComponent
     {
         [Inject]
         private HttpClient HttpClient { get; set; }

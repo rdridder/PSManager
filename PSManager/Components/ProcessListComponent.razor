@@ -1,0 +1,31 @@
+﻿<PageTitle>Process list</PageTitle>
+
+<h1>Process list</h1>
+@if (processes == null)
+{
+    <Loader />
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>IsReplayable</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var process in processes)
+            {
+                <tr class="table-primary">
+                    <td>@process.Id</td>
+                    <td>@process.Name</td>
+                    <td>@process.IsReplayable</td>
+                    <td><span class="badge bg-primary">@process.Status</span></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
