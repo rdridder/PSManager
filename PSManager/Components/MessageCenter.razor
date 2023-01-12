@@ -1,0 +1,23 @@
+﻿<h1>MessageCenter</h1>
+<div class="form-group">
+    <EditForm Model="@_keyValue">
+    <label>
+        Key:
+    </label>
+        <TextField @bind-Value="_keyValue.Key" />
+    <label>
+        Value:
+    </label>
+        <TextField @bind-Value="_keyValue.Value" />
+    </EditForm>
+</div>
+<button @onclick="Send" disabled="@(!IsConnected)">Send</button>
+
+<hr>
+
+@for (int i = messages.Count - 1; i >= 0; i--)
+{
+    <div class="alert alert-info" role="alert">
+        @messages.ElementAt(i)
+    </div>
+}
