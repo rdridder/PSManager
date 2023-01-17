@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PSDTO;
 using PSDTO.Process;
@@ -8,6 +9,7 @@ using PSInterfaces;
 namespace PSAPI.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("[controller]")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
