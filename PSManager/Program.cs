@@ -1,10 +1,13 @@
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Localization;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
+using Microsoft.IdentityModel.Logging;
 using PSManager;
+using PSManager.Cache;
 using PSManager.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,14 +17,13 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 
-
-var initialScopes = builder.Configuration.GetValue<string>("DownstreamApi:Scopes")?.Split(' ');
+var initialScopes = builder.Configuration.GetSection("DownstreamApi:Scopes").Get<string>().Split(" ", System.StringSplitOptions.RemoveEmptyEntries);
 
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"))
         .EnableTokenAcquisitionToCallDownstreamApi(initialScopes)
-            .AddMicrosoftGraph(builder.Configuration.GetSection("DownstreamApi"))
-            .AddInMemoryTokenCaches();
+            //.AddInMemoryTokenCaches()
+            .AddDistributedTokenCaches(); ;
 
 builder.Services.AddControllersWithViews(options =>
 {
@@ -34,11 +36,6 @@ builder.Services.AddControllersWithViews(options =>
 builder.Services.AddRazorPages()
      .AddMicrosoftIdentityUI();
 
-
-
-
-
-
 builder.Services.AddScoped(sp =>
     new HttpClient
     {
@@ -48,11 +45,22 @@ builder.Services.AddScoped(sp =>
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 builder.Services.AddScoped<IStringLocalizer<App>, StringLocalizer<App>>();
 
+// Needs to happen before build
+if (builder.Environment.IsDevelopment())
+{
+    // Add credentials cache on disk
+    builder.Services.AddSingleton<IDistributedCache, LocalFileTokenCache>();
+}
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
+{
+    // Set verbose logging
+    IdentityModelEventSource.ShowPII = true;
+}
+else
 {
     app.UseExceptionHandler("/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
@@ -60,15 +68,10 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
-
 app.Run();
