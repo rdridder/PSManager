@@ -1,3 +1,17 @@
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Localization;
+using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.UI;
+using Microsoft.IdentityModel.Logging;
+using PSManager;
+using PSManager.Cache;
+using PSManager.Data;
+using PSManager.Hubs;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
