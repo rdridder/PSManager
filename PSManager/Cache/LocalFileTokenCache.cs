@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
 
+// Taken from https://sergeytihon.com/tag/authorization/
+// Very nice solution to prevent errors after restarting the server
 namespace PSManager.Cache
 {
     public class LocalFileTokenCache : IDistributedCache
