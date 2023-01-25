@@ -1,4 +1,3 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PSDTO;
@@ -18,20 +17,14 @@ namespace PSAPI.Controllers
     {
         private readonly IProcessService _processService;
 
-        // TODO remove mapper
-        private readonly IMapper _mapper;
-
-        // TODO variable is not used
-        private readonly int _limit = 0;
+        private bool _signalREnabled = false;
 
         private readonly ILogger<PSController> _logger;
 
-        public PSController(ILogger<PSController> logger, IMapper mapper,
-                            IConfiguration configuration, IProcessService processService)
+        public PSController(ILogger<PSController> logger, IConfiguration configuration, IProcessService processService)
         {
             _logger = logger;
-            _mapper = mapper;
-            _limit = int.Parse(configuration["PageSize"]);
+            _signalREnabled = configuration.GetSection("SignalR").GetValue<bool>("Enable");
             _processService = processService;
         }
 
