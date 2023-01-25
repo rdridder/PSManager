@@ -6,6 +6,7 @@ using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 using PSAPI.AutoMapper;
+using PSAPI.Hubs;
 using PSAPI.Middleware;
 using PSAZServiceBus.Services;
 using PSData.Context;
@@ -17,7 +18,6 @@ using MvcJsonOptions = Microsoft.AspNetCore.Mvc.JsonOptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 // This is required to be instantiated before the OpenIdConnectOptions starts getting configured.
 // By default, the claims mapping will map claim names in the old format to accommodate older SAML applications.
 // 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role' instead of 'roles'
@@ -28,6 +28,14 @@ JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 builder.Services.AddMicrosoftIdentityWebApiAuthentication(builder.Configuration);
 
 // Add services to the container.
+
+// Do we need to enable signalR
+var useSignalR = builder.Configuration.GetSection("SignalR").GetValue<bool>("Enable");
+if (useSignalR)
+{
+    builder.Services.AddSignalR();
+}
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -102,6 +110,11 @@ if (app.Environment.IsDevelopment())
     // Show verbose error messages
     app.UseDeveloperExceptionPage();
     IdentityModelEventSource.ShowPII = true;
+}
+
+if (useSignalR)
+{
+    app.MapHub<ProcessMessageHub>("/processMessageHub");
 }
 
 app.UseMiddleware<ErrorHandlerMiddleware>();
