@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Model;
 using PSData.Context;
 using PSDTO;
@@ -8,6 +9,7 @@ using PSDTO.Messaging;
 using PSDTO.Process;
 using PSDTO.ProcessDefinition;
 using PSInterfaces;
+using PSServices.ServiceOptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,15 +25,18 @@ namespace PSServices
 
         private readonly IMapper _mapper;
 
+        private readonly bool _signalREnabled;
+
         private readonly int _limit;
 
         public ProcessService(ProcessContext processContext, IMapper mapper,
-                              IMessageService messageService, int limit = 5)
+                              IMessageService messageService, IOptions<ProcessServiceOptions> options)
         {
             _processContext = processContext;
             _mapper = mapper;
             _messageService = messageService;
-            _limit = limit;
+            _signalREnabled = options.Value.SignalREnabled;
+            _limit = options.Value.PageSize;
         }
 
         public async Task<CreatedIdDTO> AddProcessDefinition(ProcessDefinitionCreateDTO processDefinitionCreateDTO)

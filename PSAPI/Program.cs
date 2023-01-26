@@ -12,11 +12,16 @@ using PSAZServiceBus.Services;
 using PSData.Context;
 using PSInterfaces;
 using PSServices;
+using PSServices.ServiceOptions;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json.Serialization;
 using MvcJsonOptions = Microsoft.AspNetCore.Mvc.JsonOptions;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Add options for services
+builder.Services.Configure<ProcessServiceOptions>(builder.Configuration.GetSection(ProcessServiceOptions.ProcessService));
+
 
 // This is required to be instantiated before the OpenIdConnectOptions starts getting configured.
 // By default, the claims mapping will map claim names in the old format to accommodate older SAML applications.

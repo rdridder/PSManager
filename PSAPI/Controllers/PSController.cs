@@ -21,10 +21,9 @@ namespace PSAPI.Controllers
 
         private readonly ILogger<PSController> _logger;
 
-        public PSController(ILogger<PSController> logger, IConfiguration configuration, IProcessService processService)
+        public PSController(ILogger<PSController> logger, IProcessService processService)
         {
             _logger = logger;
-            _signalREnabled = configuration.GetSection("SignalR").GetValue<bool>("Enable");
             _processService = processService;
         }
 

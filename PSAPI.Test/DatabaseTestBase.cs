@@ -3,6 +3,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Model;
 using Moq;
 using PSAPI.AutoMapper;
@@ -12,6 +13,7 @@ using PSData.Context;
 using PSDTO.Enums;
 using PSDTO.Process;
 using PSServices;
+using PSServices.ServiceOptions;
 
 namespace PSAPI.Test
 {
@@ -31,6 +33,8 @@ namespace PSAPI.Test
 
         protected readonly DbContextOptions<ProcessContext> _contextOptions;
 
+        protected readonly IOptions<ProcessServiceOptions> _processServiceOptions;
+
         public DatabaseTestBase()
         {
             _logger = new Mock<ILogger<PSController>>().Object;
@@ -41,6 +45,13 @@ namespace PSAPI.Test
             _config = new ConfigurationBuilder()
             .AddInMemoryCollection(GetConfig())
             .Build();
+
+            var processServiceOptions = new ProcessServiceOptions()
+            {
+                PageSize = 5,
+                SignalREnabled = false
+            };
+            _processServiceOptions = Options.Create(processServiceOptions);
 
             // Create and open a connection. This creates the SQLite in-memory database, which will persist until the connection is closed
             // at the end of the test (see Dispose below).
@@ -60,8 +71,8 @@ namespace PSAPI.Test
 
         public PSController CreateController(ProcessContext context)
         {
-            var processService = new ProcessService(context, _mapper, _messageService);
-            var psController = new PSController(_logger, _mapper, _config, processService);
+            var processService = new ProcessService(context, _mapper, _messageService, _processServiceOptions);
+            var psController = new PSController(_logger, processService);
             return psController;
         }
 
