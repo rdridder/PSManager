@@ -6,7 +6,6 @@ using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 using PSAPI.AutoMapper;
-using PSAPI.Hubs;
 using PSAPI.Middleware;
 using PSAZServiceBus.Services;
 using PSData.Context;
@@ -35,11 +34,11 @@ builder.Services.AddMicrosoftIdentityWebApiAuthentication(builder.Configuration)
 // Add services to the container.
 
 // Do we need to enable signalR
-var useSignalR = builder.Configuration.GetSection("SignalR").GetValue<bool>("Enable");
-if (useSignalR)
-{
-    builder.Services.AddSignalR();
-}
+//var useSignalR = builder.Configuration.GetSection("SignalR").GetValue<bool>("Enable");
+//if (useSignalR)
+//{
+//    builder.Services.AddSignalR();
+//}
 
 
 builder.Services.AddControllers();
@@ -105,6 +104,8 @@ builder.Services.AddSingleton<IMessageBusFactory<ServiceBusSender>, AZServiceBus
 // Inject the message service
 builder.Services.AddSingleton<IMessageService, AZMessageService>();
 
+builder.Services.AddSingleton<INotifierService, SignalRNotifierService>();
+
 var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -117,10 +118,10 @@ if (app.Environment.IsDevelopment())
     IdentityModelEventSource.ShowPII = true;
 }
 
-if (useSignalR)
-{
-    app.MapHub<ProcessMessageHub>("/processMessageHub");
-}
+//if (useSignalR)
+//{
+//    //app.MapHub<ProcessMessageHub>("/processMessageHub");
+//}
 
 app.UseMiddleware<ErrorHandlerMiddleware>();
 

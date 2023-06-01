@@ -61,6 +61,9 @@ if (builder.Environment.IsDevelopment())
 
 var app = builder.Build();
 
+app.UseCors(config => config.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

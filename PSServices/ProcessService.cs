@@ -23,6 +23,8 @@ namespace PSServices
 
         private readonly IMessageService _messageService;
 
+        private readonly INotifierService _notifierService;
+
         private readonly IMapper _mapper;
 
         private readonly bool _signalREnabled;
@@ -30,11 +32,12 @@ namespace PSServices
         private readonly int _limit;
 
         public ProcessService(ProcessContext processContext, IMapper mapper,
-                              IMessageService messageService, IOptions<ProcessServiceOptions> options)
+                              IMessageService messageService, INotifierService notifierService, IOptions<ProcessServiceOptions> options)
         {
             _processContext = processContext;
             _mapper = mapper;
             _messageService = messageService;
+            _notifierService = notifierService;
             _signalREnabled = options.Value.SignalREnabled;
             _limit = options.Value.PageSize;
         }
@@ -162,6 +165,12 @@ namespace PSServices
                 .Take(_limit)
                 .Include(x => x.Status)
                 .ToListAsync();
+
+            if (_notifierService != null)
+            {
+                await _notifierService.SendMessageAsync(NotifierEnum.processFinished, "HELLO");
+            }
+
             return _mapper.Map<List<ProcessListDTO>>(result);
         }
 
